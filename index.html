@@ -25,6 +25,7 @@
             --text: #e0e8ff;
             --muted: #4a5580;
             --input-bg: #121829;
+            --gold: #ffd700;
         }
 
         * {
@@ -41,6 +42,7 @@
             overflow: hidden;
         }
 
+        /* --- AUTH SCREEN --- */
         #auth-screen {
             position: fixed;
             inset: 0;
@@ -163,6 +165,7 @@
             margin-left: 5px;
         }
 
+        /* --- APP CONTENT --- */
         #app-content {
             transition: filter 1s;
             height: 100vh;
@@ -249,12 +252,8 @@
             color: var(--warn);
         }
 
-        .stat-val.safe {
-            color: var(--safe);
-        }
-
         .stat-val.gold {
-            color: #ffd700;
+            color: var(--gold);
         }
 
         .stat-label {
@@ -267,18 +266,38 @@
             flex-direction: column;
             align-items: center;
             padding: 6px 14px;
-            border: 1px solid #ffd700;
+            border: 1px solid var(--gold);
             background: rgba(255, 215, 0, 0.08);
             position: relative;
             overflow: hidden;
         }
 
-        .points-display::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.05), transparent);
+        /* --- NÚT CỬA HÀNG --- */
+        .btn-store {
+            background: rgba(255, 215, 0, 0.1);
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            padding: 8px 12px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            margin-right: 15px;
         }
+
+        .btn-store:hover {
+            background: var(--gold);
+            color: #000;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+        }
+
+        /* -------------------- */
 
         .btn-report {
             background: var(--safe);
@@ -302,6 +321,30 @@
             background: #fff;
             transform: translateY(-2px);
             box-shadow: 0 0 25px rgba(0, 230, 118, 0.8);
+        }
+
+        .btn-feedback {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--muted);
+            padding: 8px 16px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            letter-spacing: 1px;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-feedback:hover {
+            border-color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            transform: translateY(-2px);
         }
 
         .btn-logout {
@@ -379,16 +422,6 @@
             background: #080c18 !important;
         }
 
-        .leaflet-control-attribution {
-            display: none;
-        }
-
-        .list-panel {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-
         .filter-bar {
             display: flex;
             align-items: center;
@@ -419,28 +452,24 @@
             border-color: var(--text);
             color: var(--text);
             background: rgba(255, 255, 255, 0.07);
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.15);
         }
 
         .filter-btn.active-fire {
             border-color: var(--danger);
             color: var(--danger);
             background: rgba(255, 45, 85, 0.1);
-            box-shadow: 0 0 8px rgba(255, 45, 85, 0.2);
         }
 
         .filter-btn.active-flood {
             border-color: var(--accent);
             color: var(--accent);
             background: rgba(0, 229, 255, 0.1);
-            box-shadow: 0 0 8px rgba(0, 229, 255, 0.2);
         }
 
         .filter-btn.active-traffic {
             border-color: var(--warn);
             color: var(--warn);
             background: rgba(255, 204, 0, 0.1);
-            box-shadow: 0 0 8px rgba(255, 204, 0, 0.2);
         }
 
         .incident-list {
@@ -742,6 +771,7 @@
             flex-shrink: 0;
         }
 
+        /* --- MODAL --- */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -806,6 +836,67 @@
         .modal-body {
             padding: 20px;
         }
+
+        /* --- STORE STYLES --- */
+        .store-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .store-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .store-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        .item-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .item-name {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+
+        .item-price {
+            font-family: 'Space Mono', monospace;
+            color: var(--gold);
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .btn-buy {
+            width: 100%;
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 6px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-buy:hover {
+            background: var(--gold);
+            color: #000;
+        }
+        /* -------------------- */
 
         .form-group {
             margin-bottom: 15px;
@@ -1037,6 +1128,9 @@
                     <div class="stat-val gold" id="points-display">0</div>
                     <div class="stat-label">⭐ ĐIỂM</div>
                 </div>
+                
+                <button class="btn-store" onclick="openStoreModal()">🛍️</button>
+                
             </div>
             <div style="display:flex; align-items:center; gap:10px;">
                 <div id="user-display"
@@ -1044,6 +1138,8 @@
                     <div style="color:var(--muted); letter-spacing:1px;">ĐĂNG NHẬP AS</div>
                     <div id="display-username" style="font-weight:700; letter-spacing:2px;"></div>
                 </div>
+                
+                <button class="btn-feedback" onclick="openFeedbackModal()">💌 ĐÓNG GÓP</button>
                 <button class="btn-report" onclick="openReportModal()">⚠️ GỬI PHẢN ÁNH</button>
                 <button class="btn-logout" id="btn-logout" onclick="logout()" style="display:none;">⏻ ĐĂNG XUẤT</button>
             </div>
@@ -1155,6 +1251,38 @@
         </div>
     </div>
 
+    <div id="feedbackModal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div class="modal-title">GÓP Ý XÂY DỰNG APP</div>
+                <button class="btn-close" onclick="closeFeedbackModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" style="font-size: 14px; color: var(--accent);">
+                        Nêu những điều bạn hài lòng / chưa hài lòng về app nha:
+                    </label>
+                    <textarea class="form-textarea" id="feedback-content" rows="6" 
+                        placeholder="Ví dụ: Giao diện đẹp nhưng load bản đồ hơi chậm..."></textarea>
+                </div>
+                <button class="btn-submit" onclick="submitFeedback()">GỬI Ý KIẾN</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="storeModal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div class="modal-title">CỬA HÀNG ĐỔI ĐIỂM</div>
+                <button class="btn-close" onclick="closeStoreModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="store-grid" id="store-container">
+                    </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script>
@@ -1183,6 +1311,15 @@
         let contributionPoints = 0;
         let incidents = [];
         let selectedIncidentId = null;
+        
+        // Dữ liệu cửa hàng
+        const storeItems = [
+            { id: 1, name: "Thẻ Cào 10K", price: 50, icon: "🎫" },
+            { id: 2, name: "Voucher Coffee", price: 100, icon: "☕" },
+            { id: 3, name: "Huy Hiệu Hiệp Sĩ", price: 200, icon: "🛡️" },
+            { id: 4, name: "Icon VIP Map", price: 500, icon: "👑" }
+        ];
+
         const sampleIncidents = [
             {
                 id: 'inc-001',
@@ -1470,6 +1607,16 @@
 
         function addPoints(pts) {
             contributionPoints += pts;
+            updatePointsUI();
+            
+            const popup = document.createElement('div');
+            popup.className = 'points-popup';
+            popup.textContent = `+${pts} ⭐ ĐIỂM ĐÓNG GÓP`;
+            document.body.appendChild(popup);
+            setTimeout(() => popup.remove(), 2600);
+        }
+
+        function updatePointsUI() {
             const el = document.getElementById('points-display');
             el.textContent = contributionPoints;
             el.style.transform = 'scale(1.4)';
@@ -1479,12 +1626,6 @@
                 el.style.color = '#ffd700';
                 el.style.transition = 'all 0.3s';
             }, 300);
-
-            const popup = document.createElement('div');
-            popup.className = 'points-popup';
-            popup.textContent = `+${pts} ⭐ ĐIỂM ĐÓNG GÓP`;
-            document.body.appendChild(popup);
-            setTimeout(() => popup.remove(), 2600);
         }
 
         function updateStats() {
@@ -1497,6 +1638,86 @@
         function openReportModal() { document.getElementById('reportModal').classList.add('open'); }
         function closeReportModal() { document.getElementById('reportModal').classList.remove('open'); }
         document.getElementById('reportModal').addEventListener('click', function (e) { if (e.target === this) closeReportModal(); });
+
+        /* --- JS CHO TÍNH NĂNG ĐÓNG GÓP --- */
+        function openFeedbackModal() {
+            document.getElementById('feedbackModal').classList.add('open');
+            document.getElementById('feedback-content').focus();
+        }
+
+        function closeFeedbackModal() {
+            document.getElementById('feedbackModal').classList.remove('open');
+        }
+
+        document.getElementById('feedbackModal').addEventListener('click', function (e) {
+            if (e.target === this) closeFeedbackModal();
+        });
+
+        function submitFeedback() {
+            const content = document.getElementById('feedback-content').value.trim();
+            const btn = document.querySelector('#feedbackModal .btn-submit');
+            
+            if (!content) {
+                alert("Bạn chưa nhập nội dung góp ý nè! 😅");
+                return;
+            }
+
+            btn.innerHTML = "ĐANG GỬI...";
+            setTimeout(() => {
+                alert("Cảm ơn bạn đã đóng góp ý kiến! ❤️\nChúng mình sẽ ghi nhận để cải thiện App.");
+                document.getElementById('feedback-content').value = "";
+                closeFeedbackModal();
+                btn.innerHTML = "GỬI Ý KIẾN";
+                addPoints(5); 
+            }, 1000);
+        }
+        /* -------------------------------------- */
+
+        /* --- JS CHO TÍNH NĂNG CỬA HÀNG (MỚI) --- */
+        function openStoreModal() {
+            document.getElementById('storeModal').classList.add('open');
+            renderStore();
+        }
+
+        function closeStoreModal() {
+            document.getElementById('storeModal').classList.remove('open');
+        }
+        document.getElementById('storeModal').addEventListener('click', function (e) {
+            if (e.target === this) closeStoreModal();
+        });
+
+        function renderStore() {
+            const container = document.getElementById('store-container');
+            container.innerHTML = '';
+            storeItems.forEach(item => {
+                const el = document.createElement('div');
+                el.className = 'store-item';
+                el.innerHTML = `
+                    <div class="item-icon">${item.icon}</div>
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-price">🪙 ${item.price} ĐIỂM</div>
+                    <button class="btn-buy" onclick="buyItem(${item.id})">ĐỔI NGAY</button>
+                `;
+                container.appendChild(el);
+            });
+        }
+
+        function buyItem(id) {
+            const item = storeItems.find(i => i.id === id);
+            if (!item) return;
+
+            if (contributionPoints >= item.price) {
+                if(confirm(`Bạn có muốn đổi ${item.price} điểm lấy "${item.name}" không?`)) {
+                    contributionPoints -= item.price;
+                    updatePointsUI();
+                    alert(`✅ Chúc mừng! Bạn đã nhận được: ${item.name}`);
+                    closeStoreModal();
+                }
+            } else {
+                alert(`❌ Số dư không đủ! Bạn cần thêm ${item.price - contributionPoints} điểm nữa.`);
+            }
+        }
+        /* -------------------------------------- */
 
         function getLocation() {
             const btn = document.querySelector('.btn-geo');
