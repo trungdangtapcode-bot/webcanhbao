@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APP CỨU HỘ — Hệ thống Cảnh báo</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Barlow+Condensed:wght@300;400;600;700;900&family=Noto+Sans+Vietnamese:wght@300;400;600&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #060810;
+            --panel: #0b0f1a;
+            --border: #1a2035;
+            --accent: #00e5ff;
+            --danger: #ff2d55;
+            --warn: #ffcc00;
+            --safe: #00e676;
+            --text: #e0e8ff;
+            --muted: #4a5580;
+            --input-bg: #121829;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Noto Sans Vietnamese', sans-serif;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        #auth-screen {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-image: linear-gradient(rgba(0, 229, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 229, 255, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s;
+        }
+
+        #auth-screen.hidden {
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .auth-box {
+            width: 400px;
+            padding: 40px;
+            background: rgba(11, 15, 26, 0.95);
+            border: 1px solid var(--accent);
+            box-shadow: 0 0 50px rgba(0, 229, 255, 0.1);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+        }
+
+        .auth-logo {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 42px;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 3px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .auth-logo span {
+            color: var(--accent);
+            text-shadow: 0 0 15px var(--accent);
+        }
+
+        .auth-sub {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: var(--muted);
+            letter-spacing: 4px;
+            margin-bottom: 30px;
+        }
+
+        .auth-field {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .auth-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: var(--accent);
+            margin-bottom: 8px;
+            display: block;
+            text-transform: uppercase;
+        }
+
+        .auth-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--muted);
+            border-left: 2px solid var(--muted);
+            padding: 12px 16px;
+            color: #fff;
+            font-family: 'Noto Sans Vietnamese', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .auth-input:focus {
+            border-color: var(--accent);
+            border-left-width: 6px;
+            box-shadow: -10px 0 20px rgba(0, 229, 255, 0.1);
+        }
+
+        .btn-auth {
+            width: 100%;
+            margin-top: 10px;
+            padding: 14px;
+            background: var(--accent);
+            color: #000;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            letter-spacing: 2px;
+            border: none;
+            cursor: pointer;
+            clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 10px);
+            transition: all 0.2s;
+        }
+
+        .btn-auth:hover {
+            background: #fff;
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.6);
+        }
+
+        .auth-toggle-text {
+            margin-top: 20px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .auth-link {
+            color: var(--accent);
+            cursor: pointer;
+            font-weight: 700;
+            text-decoration: underline;
+            margin-left: 5px;
+        }
+
+        #app-content {
+            transition: filter 1s;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-locked {
+            filter: blur(20px) brightness(0.2);
+            pointer-events: none;
+        }
+
+        .header {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 32px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(6, 8, 16, 0.9);
+            backdrop-filter: blur(12px);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--danger), #ff6b35);
+            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+            animation: pulse 2s infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                filter: drop-shadow(0 0 5px var(--danger));
+            }
+
+            50% {
+                filter: drop-shadow(0 0 15px var(--danger));
+            }
+        }
+
+        .logo-text {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #fff;
+        }
+
+        .logo-text span {
+            color: var(--accent);
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 24px;
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+        }
+
+        .stat-val {
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .stat-val.danger {
+            color: var(--danger);
+        }
+
+        .stat-val.warn {
+            color: var(--warn);
+        }
+
+        .stat-val.safe {
+            color: var(--safe);
+        }
+
+        .stat-val.gold {
+            color: #ffd700;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            text-align: center;
+        }
+
+        .points-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 6px 14px;
+            border: 1px solid #ffd700;
+            background: rgba(255, 215, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .points-display::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.05), transparent);
+        }
+
+        .btn-report {
+            background: var(--safe);
+            color: #000;
+            border: none;
+            padding: 8px 20px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            letter-spacing: 1px;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 0 15px rgba(0, 230, 118, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-report:hover {
+            background: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(0, 230, 118, 0.8);
+        }
+
+        .btn-logout {
+            background: transparent;
+            color: var(--danger);
+            border: 1px solid var(--danger);
+            padding: 8px 16px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 15px;
+            letter-spacing: 1px;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            cursor: pointer;
+            transition: all 0.2s;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-logout:hover {
+            background: var(--danger);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(255, 45, 85, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .main {
+            flex: 1;
+            position: relative;
+            z-index: 5;
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 1px;
+            background: var(--border);
+            overflow: hidden;
+        }
+
+        .panel {
+            background: var(--panel);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 10px 15px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(11, 15, 26, 0.95);
+            flex-shrink: 0;
+        }
+
+        .panel-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: var(--muted);
+            text-transform: uppercase;
+        }
+
+        #interactive-map {
+            flex: 1;
+            background: #080c18;
+            z-index: 1;
+            cursor: crosshair;
+        }
+
+        .leaflet-tile {
+            filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+        }
+
+        .leaflet-container {
+            background: #080c18 !important;
+        }
+
+        .leaflet-control-attribution {
+            display: none;
+        }
+
+        .list-panel {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .filter-bar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 12px;
+            background: rgba(6, 8, 16, 0.8);
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .filter-btn {
+            flex: 1;
+            padding: 7px 4px;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .filter-btn.active-all {
+            border-color: var(--text);
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.07);
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.15);
+        }
+
+        .filter-btn.active-fire {
+            border-color: var(--danger);
+            color: var(--danger);
+            background: rgba(255, 45, 85, 0.1);
+            box-shadow: 0 0 8px rgba(255, 45, 85, 0.2);
+        }
+
+        .filter-btn.active-flood {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(0, 229, 255, 0.1);
+            box-shadow: 0 0 8px rgba(0, 229, 255, 0.2);
+        }
+
+        .filter-btn.active-traffic {
+            border-color: var(--warn);
+            color: var(--warn);
+            background: rgba(255, 204, 0, 0.1);
+            box-shadow: 0 0 8px rgba(255, 204, 0, 0.2);
+        }
+
+        .incident-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .incident-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 12px;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-left: 3px solid transparent;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            animation: slideIn 0.4s ease;
+        }
+
+        .incident-item:hover {
+            background: rgba(255, 255, 255, 0.04);
+            transform: translateX(2px);
+        }
+
+        .incident-item.selected {
+            background: rgba(0, 229, 255, 0.06);
+            border-color: rgba(0, 229, 255, 0.3);
+            border-left-color: var(--accent);
+        }
+
+        .incident-item[data-type="fire"] {
+            border-left-color: var(--danger);
+        }
+
+        .incident-item[data-type="flood"] {
+            border-left-color: var(--accent);
+        }
+
+        .incident-item[data-type="traffic"] {
+            border-left-color: var(--warn);
+        }
+
+        .incident-item.hidden {
+            display: none;
+        }
+
+        .incident-icon {
+            font-size: 22px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .incident-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .incident-type {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #fff;
+            margin-bottom: 2px;
+        }
+
+        .incident-loc {
+            font-size: 11px;
+            color: var(--muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 4px;
+        }
+
+        .incident-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .incident-time {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: var(--muted);
+        }
+
+        .incident-badge {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            padding: 1px 6px;
+            border-radius: 2px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .badge-processing {
+            background: rgba(255, 204, 0, 0.15);
+            color: var(--warn);
+            border: 1px solid rgba(255, 204, 0, 0.3);
+        }
+
+        .badge-done {
+            background: rgba(0, 230, 118, 0.12);
+            color: var(--safe);
+            border: 1px solid rgba(0, 230, 118, 0.3);
+        }
+
+        .badge-urgent {
+            background: rgba(255, 45, 85, 0.15);
+            color: var(--danger);
+            border: 1px solid rgba(255, 45, 85, 0.3);
+        }
+
+        .detail-view {
+            position: absolute;
+            inset: 0;
+            background: var(--panel);
+            display: flex;
+            flex-direction: column;
+            animation: slideInRight 0.3s ease;
+            z-index: 5;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+            }
+
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        .detail-view.hidden {
+            display: none;
+        }
+
+        .detail-header-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(6, 8, 16, 0.9);
+            flex-shrink: 0;
+        }
+
+        .btn-back {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            padding: 5px 12px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 13px;
+            cursor: pointer;
+            letter-spacing: 1px;
+            border-radius: 3px;
+            transition: all 0.2s;
+        }
+
+        .btn-back:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .detail-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .detail-title-h {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 26px;
+            font-weight: 900;
+            margin-bottom: 4px;
+        }
+
+        .detail-sub-h {
+            font-size: 11px;
+            color: var(--muted);
+            margin-bottom: 18px;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 12px;
+        }
+
+        .info-key {
+            color: var(--muted);
+        }
+
+        .info-val {
+            color: #fff;
+            font-family: 'Space Mono', monospace;
+            text-align: right;
+            max-width: 200px;
+            word-break: break-word;
+        }
+
+        .evidence-container {
+            margin-top: 15px;
+            border: 1px solid var(--border);
+            padding: 5px;
+            border-radius: 4px;
+            background: #000;
+        }
+
+        .evidence-media {
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+            display: block;
+            border-radius: 2px;
+        }
+
+        .evidence-label {
+            font-size: 10px;
+            color: var(--accent);
+            margin-bottom: 5px;
+            font-family: 'Barlow Condensed', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .points-popup {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 9000;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.05));
+            border: 1px solid #ffd700;
+            color: #ffd700;
+            padding: 10px 20px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            border-radius: 4px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            animation: pointsAnim 2.5s ease forwards;
+            pointer-events: none;
+        }
+
+        @keyframes pointsAnim {
+            0% {
+                opacity: 0;
+                transform: translateY(10px) scale(0.9);
+            }
+
+            20% {
+                opacity: 1;
+                transform: translateY(-5px) scale(1.05);
+            }
+
+            70% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .ticker-bar {
+            background: var(--panel);
+            padding: 8px 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            font-size: 10px;
+            flex-shrink: 0;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-box {
+            background: var(--panel);
+            border: 1px solid var(--accent);
+            width: 95%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.15);
+        }
+
+        .modal-header {
+            padding: 15px 20px;
+            background: rgba(0, 229, 255, 0.1);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+        }
+
+        .btn-close {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 12px;
+            margin-bottom: 5px;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .chip-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .chip-radio {
+            display: none;
+        }
+
+        .chip-label {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+
+        .chip-radio:checked+.chip-label {
+            border-color: currentColor;
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        #cat-fire:checked+.chip-label {
+            color: var(--danger);
+            background: rgba(255, 45, 85, 0.1);
+        }
+
+        #cat-flood:checked+.chip-label {
+            color: var(--accent);
+            background: rgba(0, 229, 255, 0.1);
+        }
+
+        #cat-traffic:checked+.chip-label {
+            color: var(--warn);
+            background: rgba(255, 204, 0, 0.1);
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            color: #fff;
+            padding: 10px;
+            font-family: 'Noto Sans Vietnamese', sans-serif;
+            font-size: 13px;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--safe);
+        }
+
+        .btn-geo {
+            margin-left: 5px;
+            padding: 0 15px;
+            background: var(--safe);
+            border: none;
+            border-radius: 4px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .file-drop {
+            border: 1px dashed var(--muted);
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .file-drop:hover {
+            border-color: var(--safe);
+            background: rgba(0, 230, 118, 0.05);
+        }
+
+        .file-preview-text {
+            font-size: 11px;
+            color: var(--safe);
+            margin-top: 5px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: var(--safe);
+            border: none;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            background: #fff;
+        }
+
+        .custom-icon {
+            animation: pulseIcon 1.5s infinite;
+            filter: drop-shadow(0 0 5px red);
+        }
+
+        @keyframes pulseIcon {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+        }
+
+        .map-helper {
+            font-size: 10px;
+            color: var(--accent);
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+
+        .count-badge {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            padding: 2px 7px;
+            background: rgba(0, 229, 255, 0.1);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            border-radius: 10px;
+            color: var(--accent);
+        }
+
+        .empty-list {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+            text-align: center;
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="auth-screen">
+        <div class="auth-box">
+            <div class="auth-logo">APP <span>CỨU HỘ</span></div>
+            <div class="auth-sub" id="auth-subtitle">HỆ THỐNG CẢNH BÁO THỜI GIAN THỰC</div>
+            <div class="auth-form">
+                <div class="auth-field">
+                    <label class="auth-label">TÊN ĐĂNG NHẬP</label>
+                    <input type="text" class="auth-input" id="auth-username" placeholder="Nhập tên đăng nhập...">
+                </div>
+                <div class="auth-field">
+                    <label class="auth-label">MẬT KHẨU</label>
+                    <input type="password" class="auth-input" id="auth-password" placeholder="•••••••••••••">
+                </div>
+                <button class="btn-auth" id="btn-auth-action" onclick="handleAuthAction()">ĐĂNG NHẬP</button>
+                <div class="auth-toggle-text">
+                    <span id="auth-toggle-prompt">Chưa có tài khoản?</span>
+                    <span class="auth-link" onclick="toggleAuthMode()">Đăng ký ngay</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="app-content" class="app-locked">
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon"></div>
+                <div>
+                    <div class="logo-text">APP <span>CỨU HỘ</span></div>
+                    <div style="font-size: 9px; color: var(--muted); letter-spacing: 2px;">LIVE MONITORING SYSTEM</div>
+                </div>
+            </div>
+            <div class="header-stats">
+                <div>
+                    <div class="stat-val danger" id="stat-urgent">0</div>
+                    <div class="stat-label">KHẨN CẤP</div>
+                </div>
+                <div>
+                    <div class="stat-val warn" id="stat-warn">0</div>
+                    <div class="stat-label">CẢNH BÁO</div>
+                </div>
+                <div class="points-display">
+                    <div class="stat-val gold" id="points-display">0</div>
+                    <div class="stat-label">⭐ ĐIỂM</div>
+                </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <div id="user-display"
+                    style="font-family:'Space Mono',monospace; font-size:10px; color:var(--accent); display:none;">
+                    <div style="color:var(--muted); letter-spacing:1px;">ĐĂNG NHẬP AS</div>
+                    <div id="display-username" style="font-weight:700; letter-spacing:2px;"></div>
+                </div>
+                <button class="btn-report" onclick="openReportModal()">⚠️ GỬI PHẢN ÁNH</button>
+                <button class="btn-logout" id="btn-logout" onclick="logout()" style="display:none;">⏻ ĐĂNG XUẤT</button>
+            </div>
+        </header>
+
+        <div class="main">
+
+            <div class="panel" style="position: relative;">
+
+                <div class="panel-header">
+                    <div class="panel-title">DANH SÁCH SỰ CỐ</div>
+                    <span class="count-badge" id="incident-count">0</span>
+                </div>
+
+                <div class="filter-bar">
+                    <button class="filter-btn active-all" id="filter-all" onclick="setFilter('all')">TẤT CẢ</button>
+                    <button class="filter-btn" id="filter-fire" onclick="setFilter('fire')">🔥 CHÁY</button>
+                    <button class="filter-btn" id="filter-flood" onclick="setFilter('flood')">💧 LỤT</button>
+                    <button class="filter-btn" id="filter-traffic" onclick="setFilter('traffic')">🚗 TẮC</button>
+                </div>
+
+                <div class="incident-list" id="incident-list">
+                    <div class="empty-list" id="empty-list-msg">[ CHƯA CÓ DỮ LIỆU ]<br>Nhấn "Gửi Phản Ánh" để thêm sự cố
+                    </div>
+                </div>
+
+                <div class="detail-view hidden" id="detail-view">
+                    <div class="detail-header-bar">
+                        <button class="btn-back" onclick="closeDetail()">◀ QUAY LẠI</button>
+                        <div class="panel-title" style="flex:1; text-align:right;">CHI TIẾT SỰ CỐ</div>
+                    </div>
+                    <div class="detail-content" id="detail-container">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">BẢN ĐỒ TƯƠNG TÁC</div>
+                </div>
+                <div id="interactive-map"></div>
+            </div>
+
+        </div>
+
+        <div class="ticker-bar">
+            <div style="color:var(--muted); letter-spacing:1px;">AI SCANNING:</div>
+            <div style="color:var(--danger); border:1px solid var(--danger); padding:2px 6px;">🔥 FIRE</div>
+            <div style="color:var(--accent); border:1px solid var(--accent); padding:2px 6px;">💧 FLOOD</div>
+            <div style="color:var(--warn); border:1px solid var(--warn); padding:2px 6px;">🚗 TRAFFIC</div>
+        </div>
+    </div>
+
+    <div id="reportModal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div class="modal-title">GỬI THÔNG TIN CỨU HỘ</div>
+                <button class="btn-close" onclick="closeReportModal()">×</button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label class="form-label">PHÂN LOẠI SỰ CỐ *</label>
+                    <div class="chip-group">
+                        <input type="radio" name="cat" id="cat-fire" value="fire" class="chip-radio" checked>
+                        <label for="cat-fire" class="chip-label">🔥 Cháy nổ</label>
+                        <input type="radio" name="cat" id="cat-flood" value="flood" class="chip-radio">
+                        <label for="cat-flood" class="chip-label">💧 Ngập lụt</label>
+                        <input type="radio" name="cat" id="cat-traffic" value="traffic" class="chip-radio">
+                        <label for="cat-traffic" class="chip-label">🚗 Tắc đường</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">VỊ TRÍ *</label>
+                    <div style="display:flex;">
+                        <input type="text" class="form-input" id="loc-input"
+                            placeholder="Nhập địa chỉ hoặc lấy toạ độ...">
+                        <button class="btn-geo" onclick="getLocation()">📍 Lấy vị trí</button>
+                    </div>
+                    <div class="map-helper">💡 Mẹo: Bạn có thể click trực tiếp vào Bản đồ để chọn vị trí!</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">MÔ TẢ TÌNH TRẠNG</label>
+                    <textarea class="form-textarea" id="desc-input" rows="3"
+                        placeholder="Mô tả chi tiết sự việc..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">SỐ ĐIỆN THOẠI LIÊN HỆ</label>
+                    <input type="tel" class="form-input" id="phone-input" placeholder="090xxxxxxx">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">MINH CHỨNG (HÌNH ẢNH / VIDEO)</label>
+                    <div class="file-drop" onclick="document.getElementById('modal-file').click()">
+                        <span style="font-size:20px">📷</span>
+                        <span style="font-size:12px; color:var(--muted)">Nhấn để tải tệp lên</span>
+                        <span id="file-name" class="file-preview-text"></span>
+                        <input type="file" id="modal-file" style="display:none" accept="image/*,video/*"
+                            onchange="updateFileName(this)">
+                    </div>
+                </div>
+
+                <button class="btn-submit" onclick="submitReport()">GỬI THÔNG TIN</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+
+        let map;
+        let isLoginMode = true;
+        let userLat = null;
+        let userLng = null;
+        let currentUser = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem('cuuho_session');
+            if (saved) {
+                const { username } = JSON.parse(saved);
+                currentUser = username;
+                document.getElementById('auth-screen').classList.add('hidden');
+                document.getElementById('app-content').classList.remove('app-locked');
+                showUserDisplay(username);
+                initMap();
+                updateStats();
+                updateIncidentCount();
+            }
+        });
+        let clickMarker = null;
+        let currentFilter = 'all';
+        let contributionPoints = 0;
+        let incidents = [];
+        let selectedIncidentId = null;
+        const sampleIncidents = [
+            {
+                id: 'inc-001',
+                type: 'fire',
+                label: 'HỎA HOẠN',
+                icon: '🔥',
+                colorClass: 'danger',
+                location: 'Số 12 Nguyễn Huệ, Q.1',
+                description: 'Cháy lớn tại tầng 3 tòa nhà, khói đen bốc cao.',
+                time: '13:05',
+                phone: '028-114',
+                status: 'urgent',
+                statusLabel: 'KHẨN CẤP',
+                lat: 10.7769, lng: 106.7009,
+                mediaHTML: '',
+            },
+            {
+                id: 'inc-002',
+                type: 'flood',
+                label: 'NGẬP LỤT',
+                icon: '💧',
+                colorClass: 'accent',
+                location: 'Đường Kinh Dương Vương, Q.Bình Tân',
+                description: 'Nước ngập sâu khoảng 50cm, xe máy không đi được.',
+                time: '12:47',
+                phone: '0909-123456',
+                status: 'processing',
+                statusLabel: 'ĐANG XỬ LÝ',
+                lat: 10.7527, lng: 106.6023,
+                mediaHTML: '',
+            },
+            {
+                id: 'inc-003',
+                type: 'traffic',
+                label: 'TẮC ĐƯỜNG',
+                icon: '🚗',
+                colorClass: 'warn',
+                location: 'Cầu Bình Phước, Q.Thủ Đức',
+                description: 'Kẹt xe nghiêm trọng, hàng km xe nối đuôi nhau.',
+                time: '12:30',
+                phone: '',
+                status: 'processing',
+                statusLabel: 'ĐANG XỬ LÝ',
+                lat: 10.8672, lng: 106.7265,
+                mediaHTML: '',
+            },
+            {
+                id: 'inc-004',
+                type: 'flood',
+                label: 'NGẬP LỤT',
+                icon: '💧',
+                colorClass: 'accent',
+                location: 'Hẻm 34 Lê Văn Khương, Q.12',
+                description: 'Hẻm nhỏ ngập sau mưa lớn, người dân di chuyển khó khăn.',
+                time: '11:55',
+                phone: '0901-654321',
+                status: 'done',
+                statusLabel: 'ĐÃ XỬ LÝ',
+                lat: 10.8540, lng: 106.6581,
+                mediaHTML: '',
+            },
+            {
+                id: 'inc-005',
+                type: 'fire',
+                label: 'HỎA HOẠN',
+                icon: '🔥',
+                colorClass: 'danger',
+                location: 'Chợ Bà Chiểu, Q.Bình Thạnh',
+                description: 'Lửa bùng phát từ sạp vải, đã được dập tắt.',
+                time: '10:20',
+                phone: '028-114',
+                status: 'done',
+                statusLabel: 'ĐÃ XỬ LÝ',
+                lat: 10.8064, lng: 106.7118,
+                mediaHTML: '',
+            },
+        ];
+
+        function toggleAuthMode() {
+            isLoginMode = !isLoginMode;
+            const btn = document.getElementById('btn-auth-action');
+            const prompt = document.getElementById('auth-toggle-prompt');
+            const link = document.querySelector('.auth-link');
+            const subtitle = document.getElementById('auth-subtitle');
+            if (isLoginMode) {
+                btn.textContent = "ĐĂNG NHẬP"; subtitle.textContent = "HỆ THỐNG CẢNH BÁO THỜI GIAN THỰC";
+                prompt.textContent = "Chưa có tài khoản?"; link.textContent = "Đăng ký ngay";
+            } else {
+                btn.textContent = "ĐĂNG KÝ"; subtitle.textContent = "TẠO TÀI KHOẢN MỚI";
+                prompt.textContent = "Đã có tài khoản?"; link.textContent = "Đăng nhập ngay";
+            }
+        }
+
+        function handleAuthAction() {
+            const btn = document.getElementById('btn-auth-action');
+            const user = document.getElementById('auth-username').value.trim();
+            const pass = document.getElementById('auth-password').value;
+            if (!user || !pass) { alert("Vui lòng điền đầy đủ thông tin!"); return; }
+            btn.innerHTML = 'ĐANG KẾT NỐI...';
+            setTimeout(() => {
+                if (isLoginMode) {
+                    localStorage.setItem('cuuho_session', JSON.stringify({ username: user }));
+                    currentUser = user;
+                    btn.innerHTML = 'THÀNH CÔNG';
+                    btn.style.background = '#00e676';
+                    setTimeout(() => {
+                        document.getElementById('auth-screen').classList.add('hidden');
+                        document.getElementById('app-content').classList.remove('app-locked');
+                        showUserDisplay(user);
+                        initMap();
+                        updateStats();
+                        updateIncidentCount();
+                    }, 800);
+                } else {
+                    localStorage.setItem('cuuho_session', JSON.stringify({ username: user }));
+                    alert(`✅ Đã tạo tài khoản: ${user}`);
+                    toggleAuthMode();
+                    btn.innerHTML = 'ĐĂNG NHẬP';
+                }
+            }, 1200);
+        }
+
+        function showUserDisplay(username) {
+            document.getElementById('display-username').textContent = username.toUpperCase();
+            document.getElementById('user-display').style.display = 'block';
+            document.getElementById('btn-logout').style.display = 'flex';
+        }
+
+        function logout() {
+            if (!confirm('Bạn có chắc muốn đăng xuất?')) return;
+            localStorage.removeItem('cuuho_session');
+            currentUser = null;
+            incidents = [];
+
+            document.getElementById('auth-screen').classList.remove('hidden');
+            document.getElementById('app-content').classList.add('app-locked');
+            document.getElementById('user-display').style.display = 'none';
+            document.getElementById('btn-logout').style.display = 'none';
+            document.getElementById('auth-username').value = '';
+            document.getElementById('auth-password').value = '';
+            document.getElementById('stat-urgent').textContent = '0';
+            document.getElementById('stat-warn').textContent = '0';
+            document.getElementById('points-display').textContent = '0';
+            contributionPoints = 0;
+            document.getElementById('incident-list').innerHTML =
+                '<div class="empty-list" id="empty-list-msg">[ CHƯA CÓ DỮ LIỆU ]<br>Nhấn "Gửi Phản Ánh" để thêm sự cố</div>';
+            document.getElementById('incident-count').textContent = '0';
+            const btn = document.getElementById('btn-auth-action');
+            btn.innerHTML = 'ĐĂNG NHẬP';
+            btn.style.background = '';
+            if (map) { map.remove(); map = null; }
+        }
+
+        function initMap() {
+            map = L.map('interactive-map').setView([10.8231, 106.6297], 12);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+
+            map.on('click', function (e) {
+                const clickedLat = e.latlng.lat;
+                const clickedLng = e.latlng.lng;
+                const locInput = document.getElementById('loc-input');
+                locInput.value = `${clickedLat.toFixed(6)}, ${clickedLng.toFixed(6)}`;
+                if (clickMarker) map.removeLayer(clickMarker);
+                clickMarker = L.marker([clickedLat, clickedLng]).addTo(map).bindPopup("Vị trí đã chọn").openPopup();
+            });
+        }
+        function _unused() {
+            incidents = [...sampleIncidents];
+            incidents.forEach(inc => {
+                renderIncidentToList(inc);
+                addIncidentMarker(inc);
+            });
+            updateIncidentCount();
+            updateStats();
+        }
+
+        function renderIncidentToList(inc) {
+            const listEl = document.getElementById('incident-list');
+            const emptyMsg = document.getElementById('empty-list-msg');
+            if (emptyMsg) emptyMsg.remove();
+
+            const badgeClass = inc.status === 'done' ? 'badge-done' : inc.status === 'urgent' ? 'badge-urgent' : 'badge-processing';
+
+            const item = document.createElement('div');
+            item.className = 'incident-item';
+            item.dataset.type = inc.type;
+            item.dataset.id = inc.id;
+            item.innerHTML = `
+      <div class="incident-icon">${inc.icon}</div>
+      <div class="incident-info">
+        <div class="incident-type">${inc.label}</div>
+        <div class="incident-loc">📍 ${inc.location}</div>
+        <div class="incident-meta">
+          <span class="incident-time">🕐 ${inc.time}</span>
+          <span class="incident-badge ${badgeClass}">${inc.statusLabel}</span>
+        </div>
+      </div>
+    `;
+            item.addEventListener('click', () => openDetail(inc.id));
+
+            const firstItem = listEl.querySelector('.incident-item');
+            if (firstItem) {
+                listEl.insertBefore(item, firstItem);
+            } else {
+                listEl.appendChild(item);
+            }
+
+            applyFilterToItem(item);
+        }
+
+        function updateIncidentCount() {
+            const visible = document.querySelectorAll('.incident-item:not(.hidden)').length;
+            const total = incidents.length;
+            const countEl = document.getElementById('incident-count');
+            countEl.textContent = currentFilter === 'all' ? total : `${visible}/${total}`;
+        }
+
+        function addIncidentMarker(inc) {
+            if (!map) return;
+            const icon = L.divIcon({
+                className: 'custom-icon',
+                html: `<div style="font-size:26px; text-shadow:0 0 10px red; cursor:pointer;">${inc.icon}</div>`,
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            });
+            const marker = L.marker([inc.lat, inc.lng], { icon })
+                .addTo(map)
+                .bindPopup(`<b style="color:${inc.colorClass === 'danger' ? '#ff2d55' : inc.colorClass === 'accent' ? '#00e5ff' : '#ffcc00'}">${inc.label}</b><br>${inc.description}`);
+            marker.on('click', () => openDetail(inc.id));
+        }
+        function setFilter(type) {
+            currentFilter = type;
+
+            document.getElementById('filter-all').className = 'filter-btn' + (type === 'all' ? ' active-all' : '');
+            document.getElementById('filter-fire').className = 'filter-btn' + (type === 'fire' ? ' active-fire' : '');
+            document.getElementById('filter-flood').className = 'filter-btn' + (type === 'flood' ? ' active-flood' : '');
+            document.getElementById('filter-traffic').className = 'filter-btn' + (type === 'traffic' ? ' active-traffic' : '');
+
+            document.querySelectorAll('.incident-item').forEach(item => applyFilterToItem(item));
+            updateIncidentCount();
+        }
+
+        function applyFilterToItem(item) {
+            if (currentFilter === 'all' || item.dataset.type === currentFilter) {
+                item.classList.remove('hidden');
+            } else {
+                item.classList.add('hidden');
+            }
+        }
+        function openDetail(incidentId) {
+            const inc = incidents.find(i => i.id === incidentId);
+            if (!inc) return;
+
+            selectedIncidentId = incidentId;
+
+            document.querySelectorAll('.incident-item').forEach(el => el.classList.remove('selected'));
+            const sel = document.querySelector(`.incident-item[data-id="${incidentId}"]`);
+            if (sel) sel.classList.add('selected');
+
+            const titleColor = inc.colorClass === 'danger' ? 'var(--danger)' : inc.colorClass === 'accent' ? 'var(--accent)' : 'var(--warn)';
+
+            document.getElementById('detail-container').innerHTML = `
+      <div class="detail-title-h" style="color:${titleColor}">${inc.icon} ${inc.label}</div>
+      <div class="detail-sub-h">Báo cáo lúc ${inc.time} — ID: ${inc.id}</div>
+      <div class="info-row"><span class="info-key">VỊ TRÍ</span><span class="info-val">${inc.location}</span></div>
+      <div class="info-row"><span class="info-key">TÌNH TRẠNG</span><span class="info-val" style="color:${titleColor}">${inc.description}</span></div>
+      <div class="info-row"><span class="info-key">TRẠNG THÁI</span><span class="info-val">${inc.statusLabel}</span></div>
+      <div class="info-row"><span class="info-key">LIÊN HỆ</span><span class="info-val">${inc.phone || 'Không có'}</span></div>
+      <div class="info-row"><span class="info-key">NGUỒN TIN</span><span class="info-val">Cộng đồng</span></div>
+      ${inc.mediaHTML}
+    `;
+
+            document.getElementById('detail-view').classList.remove('hidden');
+
+            if (map) {
+                map.flyTo([inc.lat, inc.lng], 16, { duration: 1.5 });
+            }
+        }
+
+        function closeDetail() {
+            document.getElementById('detail-view').classList.add('hidden');
+            document.querySelectorAll('.incident-item').forEach(el => el.classList.remove('selected'));
+            selectedIncidentId = null;
+        }
+
+        function addPoints(pts) {
+            contributionPoints += pts;
+            const el = document.getElementById('points-display');
+            el.textContent = contributionPoints;
+            el.style.transform = 'scale(1.4)';
+            el.style.color = '#ffe066';
+            setTimeout(() => {
+                el.style.transform = 'scale(1)';
+                el.style.color = '#ffd700';
+                el.style.transition = 'all 0.3s';
+            }, 300);
+
+            const popup = document.createElement('div');
+            popup.className = 'points-popup';
+            popup.textContent = `+${pts} ⭐ ĐIỂM ĐÓNG GÓP`;
+            document.body.appendChild(popup);
+            setTimeout(() => popup.remove(), 2600);
+        }
+
+        function updateStats() {
+            const urgent = incidents.filter(i => i.status === 'urgent').length;
+            const processing = incidents.filter(i => i.status === 'processing').length;
+            document.getElementById('stat-urgent').textContent = urgent;
+            document.getElementById('stat-warn').textContent = processing;
+        }
+
+        function openReportModal() { document.getElementById('reportModal').classList.add('open'); }
+        function closeReportModal() { document.getElementById('reportModal').classList.remove('open'); }
+        document.getElementById('reportModal').addEventListener('click', function (e) { if (e.target === this) closeReportModal(); });
+
+        function getLocation() {
+            const btn = document.querySelector('.btn-geo');
+            const input = document.getElementById('loc-input');
+            if (!navigator.geolocation) { alert("Trình duyệt không hỗ trợ định vị!"); return; }
+            btn.innerHTML = '📡 Đang dò...';
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    userLat = pos.coords.latitude;
+                    userLng = pos.coords.longitude;
+                    input.value = `${userLat.toFixed(6)}, ${userLng.toFixed(6)}`;
+                    btn.innerHTML = '✓ Đã lấy';
+                    btn.style.background = '#fff'; btn.style.color = '#000';
+                    if (map) {
+                        map.flyTo([userLat, userLng], 16);
+                        if (clickMarker) map.removeLayer(clickMarker);
+                        clickMarker = L.marker([userLat, userLng]).addTo(map).bindPopup("Vị trí của bạn").openPopup();
+                    }
+                },
+                (err) => {
+                    console.error(err);
+                    btn.innerHTML = '❌ Lỗi';
+                    alert("Lỗi: Vui lòng nhấn 'Allow/Cho phép' quyền truy cập vị trí, hoặc thử Click chọn trên bản đồ.");
+                },
+                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+            );
+        }
+
+        function updateFileName(input) {
+            if (input.files && input.files.length > 0) {
+                document.getElementById('file-name').textContent = "Đã chọn: " + input.files[0].name;
+            }
+        }
+
+        function submitReport() {
+            const btn = document.querySelector('.btn-submit');
+            const type = document.querySelector('input[name="cat"]:checked').value;
+            const desc = document.getElementById('desc-input').value || "Không có mô tả chi tiết";
+            const locInputVal = document.getElementById('loc-input').value || "Vị trí không xác định";
+            const phone = document.getElementById('phone-input').value || "";
+            const fileInput = document.getElementById('modal-file');
+
+            let mediaHTML = "";
+            if (fileInput.files && fileInput.files[0]) {
+                const file = fileInput.files[0];
+                const url = URL.createObjectURL(file);
+                if (file.type.startsWith('video')) {
+                    mediaHTML = `<div class="evidence-container"><div class="evidence-label">MINH CHỨNG (VIDEO)</div><video src="${url}" controls class="evidence-media"></video></div>`;
+                } else {
+                    mediaHTML = `<div class="evidence-container"><div class="evidence-label">MINH CHỨNG (ẢNH)</div><img src="${url}" class="evidence-media"></div>`;
+                }
+            }
+
+            btn.innerHTML = 'ĐANG GỬI DỮ LIỆU...';
+
+            let label = "SỰ CỐ", icon = "⚠️", colorClass = "danger";
+            if (type === 'fire') { label = "HỎA HOẠN"; icon = "🔥"; colorClass = "danger"; }
+            if (type === 'flood') { label = "NGẬP LỤT"; icon = "💧"; colorClass = "accent"; }
+            if (type === 'traffic') { label = "TẮC ĐƯỜNG"; icon = "🚗"; colorClass = "warn"; }
+
+            setTimeout(() => {
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+
+
+                let targetLat = 10.8231, targetLng = 106.6297;
+                const matches = locInputVal.match(/(\d+\.\d+).*?(\d+\.\d+)/);
+                if (matches) { targetLat = parseFloat(matches[1]); targetLng = parseFloat(matches[2]); }
+
+                const newInc = {
+                    id: `inc-${Date.now()}`,
+                    type, label, icon, colorClass,
+                    location: locInputVal,
+                    description: desc,
+                    time: timeStr,
+                    phone,
+                    status: 'urgent',
+                    statusLabel: 'KHẨN CẤP',
+                    lat: targetLat,
+                    lng: targetLng,
+                    mediaHTML,
+                };
+
+                incidents.unshift(newInc);
+                renderIncidentToList(newInc);
+                addIncidentMarker(newInc);
+                updateIncidentCount();
+                updateStats();
+
+                addPoints(10);
+
+                closeReportModal();
+                setTimeout(() => openDetail(newInc.id), 300);
+
+                btn.innerHTML = 'GỬI THÔNG TIN';
+
+                document.getElementById('desc-input').value = "";
+                document.getElementById('file-name').textContent = "";
+                document.getElementById('modal-file').value = "";
+                document.getElementById('loc-input').value = "";
+                document.getElementById('phone-input').value = "";
+                const geoBtn = document.querySelector('.btn-geo');
+                geoBtn.innerHTML = '📍 Lấy vị trí';
+                geoBtn.style.background = ''; geoBtn.style.color = '';
+            }, 1000);
+        }
+    </script>
+
+</body>
+
+</html>
