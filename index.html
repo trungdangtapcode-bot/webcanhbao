@@ -1302,6 +1302,7 @@
                 document.getElementById('app-content').classList.remove('app-locked');
                 showUserDisplay(username);
                 initMap();
+                loadIncidentsFromStorage();
                 updateStats();
                 updateIncidentCount();
             }
@@ -1310,6 +1311,37 @@
         let currentFilter = 'all';
         let contributionPoints = 0;
         let incidents = [];
+        // --- CODE MỚI THÊM VÀO ---
+        const STORAGE_KEY = 'cuuho_incidents_data';
+
+        // Hàm lưu danh sách sự cố vào bộ nhớ
+        function saveIncidentsToStorage() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(incidents));
+        }
+
+        // Hàm tải danh sách sự cố từ bộ nhớ ra hiển thị
+        function loadIncidentsFromStorage() {
+            const data = localStorage.getItem(STORAGE_KEY);
+            if (data) {
+                incidents = JSON.parse(data);
+                
+                // Xóa danh sách cũ để render lại từ đầu tránh trùng lặp
+                const listEl = document.getElementById('incident-list');
+                listEl.innerHTML = ''; 
+
+                // Nếu có dữ liệu thì hiển thị lên
+                if (incidents.length > 0) {
+                    incidents.forEach(inc => {
+                        renderIncidentToList(inc);
+                        addIncidentMarker(inc);
+                    });
+                } else {
+                    // Nếu danh sách rỗng thì hiện thông báo chưa có dữ liệu
+                    listEl.innerHTML = '<div class="empty-list" id="empty-list-msg">[ CHƯA CÓ DỮ LIỆU ]<br>Nhấn "Gửi Phản Ánh" để thêm sự cố</div>';
+                }
+            }
+        }
+        // ---------------------------
         let selectedIncidentId = null;
         
         // Dữ liệu cửa hàng
@@ -1430,6 +1462,7 @@
                         document.getElementById('app-content').classList.remove('app-locked');
                         showUserDisplay(user);
                         initMap();
+                        loadIncidentsFromStorage();
                         updateStats();
                         updateIncidentCount();
                     }, 800);
@@ -1802,6 +1835,7 @@
                 };
 
                 incidents.unshift(newInc);
+                saveIncidentsToStorage();
                 renderIncidentToList(newInc);
                 addIncidentMarker(newInc);
                 updateIncidentCount();
