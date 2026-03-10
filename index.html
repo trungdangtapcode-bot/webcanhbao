@@ -5,14 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>APP CỨU HỘ — Hệ thống Cảnh báo</title>
-
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-
     <link
         href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Barlow+Condensed:wght@300;400;600;700;900&family=Noto+Sans+Vietnamese:wght@300;400;600&display=swap"
         rel="stylesheet">
-
     <style>
         :root {
             --bg: #060810;
@@ -298,7 +295,6 @@
         }
 
         /* -------------------- */
-
         .btn-report {
             background: var(--safe);
             color: #000;
@@ -568,8 +564,7 @@
             font-size: 9px;
             padding: 1px 6px;
             border-radius: 2px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            text-transform: uppercase;            letter-spacing: 1px;
         }
 
         .badge-processing {
@@ -658,8 +653,7 @@
         .detail-sub-h {
             font-size: 11px;
             color: var(--muted);
-            margin-bottom: 18px;
-            font-family: 'Space Mono', monospace;
+            margin-bottom: 18px;            font-family: 'Space Mono', monospace;
         }
 
         .info-row {
@@ -803,9 +797,7 @@
             border: 1px solid var(--accent);
             width: 95%;
             max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 0 30px rgba(0, 229, 255, 0.15);
+            max-height: 90vh;            overflow-y: auto;            box-shadow: 0 0 30px rgba(0, 229, 255, 0.15);
         }
 
         .modal-header {
@@ -896,8 +888,8 @@
             background: var(--gold);
             color: #000;
         }
-        /* -------------------- */
 
+        /* -------------------- */
         .form-group {
             margin-bottom: 15px;
         }
@@ -990,9 +982,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 5px;
-            cursor: pointer;
-            transition: all 0.2s;
+            gap: 5px;            cursor: pointer;            transition: all 0.2s;
             text-align: center;
         }
 
@@ -1057,7 +1047,6 @@
             font-style: italic;
         }
 
-
         .count-badge {
             font-family: 'Space Mono', monospace;
             font-size: 10px;
@@ -1079,11 +1068,30 @@
             font-size: 10px;
             padding: 20px;
         }
+
+        /* --- NÚT XÓA TẤT CẢ --- */
+        .btn-clear-all {
+            background: transparent;
+            color: var(--danger);
+            border: 1px solid var(--danger);
+            padding: 2px 8px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 11px;
+            letter-spacing: 1px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-clear-all:hover {
+            background: rgba(255, 45, 85, 0.1);
+            box-shadow: 0 0 10px rgba(255, 45, 85, 0.3);
+        }
     </style>
 </head>
 
 <body>
-
     <div id="auth-screen">
         <div class="auth-box">
             <div class="auth-logo">APP <span>CỨU HỘ</span></div>
@@ -1128,9 +1136,7 @@
                     <div class="stat-val gold" id="points-display">0</div>
                     <div class="stat-label">⭐ ĐIỂM</div>
                 </div>
-                
                 <button class="btn-store" onclick="openStoreModal()">🛍️</button>
-                
             </div>
             <div style="display:flex; align-items:center; gap:10px;">
                 <div id="user-display"
@@ -1138,7 +1144,6 @@
                     <div style="color:var(--muted); letter-spacing:1px;">ĐĂNG NHẬP AS</div>
                     <div id="display-username" style="font-weight:700; letter-spacing:2px;"></div>
                 </div>
-                
                 <button class="btn-feedback" onclick="openFeedbackModal()">💌 ĐÓNG GÓP</button>
                 <button class="btn-report" onclick="openReportModal()">⚠️ GỬI PHẢN ÁNH</button>
                 <button class="btn-logout" id="btn-logout" onclick="logout()" style="display:none;">⏻ ĐĂNG XUẤT</button>
@@ -1146,12 +1151,13 @@
         </header>
 
         <div class="main">
-
             <div class="panel" style="position: relative;">
-
                 <div class="panel-header">
                     <div class="panel-title">DANH SÁCH SỰ CỐ</div>
-                    <span class="count-badge" id="incident-count">0</span>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span class="count-badge" id="incident-count">0</span>
+                        <button class="btn-clear-all" onclick="clearAllIncidents()" title="Xóa toàn bộ danh sách">🗑️ XÓA</button>
+                    </div>
                 </div>
 
                 <div class="filter-bar">
@@ -1174,7 +1180,6 @@
                     <div class="detail-content" id="detail-container">
                     </div>
                 </div>
-
             </div>
 
             <div class="panel">
@@ -1183,7 +1188,6 @@
                 </div>
                 <div id="interactive-map"></div>
             </div>
-
         </div>
 
         <div class="ticker-bar">
@@ -1201,7 +1205,6 @@
                 <button class="btn-close" onclick="closeReportModal()">×</button>
             </div>
             <div class="modal-body">
-
                 <div class="form-group">
                     <label class="form-label">PHÂN LOẠI SỰ CỐ *</label>
                     <div class="chip-group">
@@ -1262,7 +1265,7 @@
                     <label class="form-label" style="font-size: 14px; color: var(--accent);">
                         Nêu những điều bạn hài lòng / chưa hài lòng về app nha:
                     </label>
-                    <textarea class="form-textarea" id="feedback-content" rows="6" 
+                    <textarea class="form-textarea" id="feedback-content" rows="6"
                         placeholder="Ví dụ: Giao diện đẹp nhưng load bản đồ hơi chậm..."></textarea>
                 </div>
                 <button class="btn-submit" onclick="submitFeedback()">GỬI Ý KIẾN</button>
@@ -1278,7 +1281,7 @@
             </div>
             <div class="modal-body">
                 <div class="store-grid" id="store-container">
-                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1286,7 +1289,6 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script>
-
         let map;
         let isLoginMode = true;
         let userLat = null;
@@ -1311,123 +1313,82 @@
         let currentFilter = 'all';
         let contributionPoints = 0;
         let incidents = [];
-        // --- CODE MỚI THÊM VÀO ---
+
+        // --- QUẢN LÝ DỮ LIỆU SỰ CỐ ---
         const STORAGE_KEY = 'cuuho_incidents_data';
 
-        // Hàm lưu danh sách sự cố vào bộ nhớ
         function saveIncidentsToStorage() {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(incidents));
         }
 
-        // Hàm tải danh sách sự cố từ bộ nhớ ra hiển thị
         function loadIncidentsFromStorage() {
             const data = localStorage.getItem(STORAGE_KEY);
             if (data) {
                 incidents = JSON.parse(data);
-                
-                // Xóa danh sách cũ để render lại từ đầu tránh trùng lặp
                 const listEl = document.getElementById('incident-list');
-                listEl.innerHTML = ''; 
-
-                // Nếu có dữ liệu thì hiển thị lên
+                listEl.innerHTML = '';
                 if (incidents.length > 0) {
                     incidents.forEach(inc => {
                         renderIncidentToList(inc);
                         addIncidentMarker(inc);
                     });
                 } else {
-                    // Nếu danh sách rỗng thì hiện thông báo chưa có dữ liệu
                     listEl.innerHTML = '<div class="empty-list" id="empty-list-msg">[ CHƯA CÓ DỮ LIỆU ]<br>Nhấn "Gửi Phản Ánh" để thêm sự cố</div>';
                 }
             }
         }
+
+        // --- HÀM XÓA TẤT CẢ SỰ CỐ ---
+        function clearAllIncidents() {
+            if (incidents.length === 0) {
+                alert("Danh sách đang trống, không có gì để xóa!");
+                return;
+            }
+
+            if (!confirm("⚠️ CẢNH BÁO: Bạn có chắc chắn muốn xóa TẤT CẢ các sự cố trên bản đồ và danh sách? Hành động này không thể hoàn tác!")) {
+                return;
+            }
+
+            // Xóa mảng dữ liệu và lưu xuống LocalStorage
+            incidents = [];
+            saveIncidentsToStorage();
+
+            // Xóa các marker của sự cố trên bản đồ
+            if (map) {
+                map.eachLayer((layer) => {
+                    if (layer instanceof L.Marker && layer !== clickMarker) {
+                        map.removeLayer(layer);
+                    }
+                });
+
+                // Nếu có popup click thì đóng lại (tuỳ chọn)
+                if (clickMarker) {
+                    map.removeLayer(clickMarker);
+                    clickMarker = null;
+                }
+            }
+
+            // Làm trống giao diện danh sách bên trái
+            const listEl = document.getElementById('incident-list');
+            listEl.innerHTML = '<div class="empty-list" id="empty-list-msg">[ CHƯA CÓ DỮ LIỆU ]<br>Nhấn "Gửi Phản Ánh" để thêm sự cố</div>';
+
+            // Đóng bảng chi tiết nếu đang mở
+            closeDetail();
+
+            // Cập nhật lại các bộ đếm
+            updateIncidentCount();
+            updateStats();
+        }
         // ---------------------------
+
         let selectedIncidentId = null;
-        
+
         // Dữ liệu cửa hàng
         const storeItems = [
             { id: 1, name: "Thẻ Cào 10K", price: 50, icon: "🎫" },
             { id: 2, name: "Voucher Coffee", price: 100, icon: "☕" },
             { id: 3, name: "Huy Hiệu Hiệp Sĩ", price: 200, icon: "🛡️" },
             { id: 4, name: "Icon VIP Map", price: 500, icon: "👑" }
-        ];
-
-        const sampleIncidents = [
-            {
-                id: 'inc-001',
-                type: 'fire',
-                label: 'HỎA HOẠN',
-                icon: '🔥',
-                colorClass: 'danger',
-                location: 'Số 12 Nguyễn Huệ, Q.1',
-                description: 'Cháy lớn tại tầng 3 tòa nhà, khói đen bốc cao.',
-                time: '13:05',
-                phone: '028-114',
-                status: 'urgent',
-                statusLabel: 'KHẨN CẤP',
-                lat: 10.7769, lng: 106.7009,
-                mediaHTML: '',
-            },
-            {
-                id: 'inc-002',
-                type: 'flood',
-                label: 'NGẬP LỤT',
-                icon: '💧',
-                colorClass: 'accent',
-                location: 'Đường Kinh Dương Vương, Q.Bình Tân',
-                description: 'Nước ngập sâu khoảng 50cm, xe máy không đi được.',
-                time: '12:47',
-                phone: '0909-123456',
-                status: 'processing',
-                statusLabel: 'ĐANG XỬ LÝ',
-                lat: 10.7527, lng: 106.6023,
-                mediaHTML: '',
-            },
-            {
-                id: 'inc-003',
-                type: 'traffic',
-                label: 'TẮC ĐƯỜNG',
-                icon: '🚗',
-                colorClass: 'warn',
-                location: 'Cầu Bình Phước, Q.Thủ Đức',
-                description: 'Kẹt xe nghiêm trọng, hàng km xe nối đuôi nhau.',
-                time: '12:30',
-                phone: '',
-                status: 'processing',
-                statusLabel: 'ĐANG XỬ LÝ',
-                lat: 10.8672, lng: 106.7265,
-                mediaHTML: '',
-            },
-            {
-                id: 'inc-004',
-                type: 'flood',
-                label: 'NGẬP LỤT',
-                icon: '💧',
-                colorClass: 'accent',
-                location: 'Hẻm 34 Lê Văn Khương, Q.12',
-                description: 'Hẻm nhỏ ngập sau mưa lớn, người dân di chuyển khó khăn.',
-                time: '11:55',
-                phone: '0901-654321',
-                status: 'done',
-                statusLabel: 'ĐÃ XỬ LÝ',
-                lat: 10.8540, lng: 106.6581,
-                mediaHTML: '',
-            },
-            {
-                id: 'inc-005',
-                type: 'fire',
-                label: 'HỎA HOẠN',
-                icon: '🔥',
-                colorClass: 'danger',
-                location: 'Chợ Bà Chiểu, Q.Bình Thạnh',
-                description: 'Lửa bùng phát từ sạp vải, đã được dập tắt.',
-                time: '10:20',
-                phone: '028-114',
-                status: 'done',
-                statusLabel: 'ĐÃ XỬ LÝ',
-                lat: 10.8064, lng: 106.7118,
-                mediaHTML: '',
-            },
         ];
 
         function toggleAuthMode() {
@@ -1519,15 +1480,6 @@
                 clickMarker = L.marker([clickedLat, clickedLng]).addTo(map).bindPopup("Vị trí đã chọn").openPopup();
             });
         }
-        function _unused() {
-            incidents = [...sampleIncidents];
-            incidents.forEach(inc => {
-                renderIncidentToList(inc);
-                addIncidentMarker(inc);
-            });
-            updateIncidentCount();
-            updateStats();
-        }
 
         function renderIncidentToList(inc) {
             const listEl = document.getElementById('incident-list');
@@ -1541,16 +1493,16 @@
             item.dataset.type = inc.type;
             item.dataset.id = inc.id;
             item.innerHTML = `
-      <div class="incident-icon">${inc.icon}</div>
-      <div class="incident-info">
-        <div class="incident-type">${inc.label}</div>
-        <div class="incident-loc">📍 ${inc.location}</div>
-        <div class="incident-meta">
-          <span class="incident-time">🕐 ${inc.time}</span>
-          <span class="incident-badge ${badgeClass}">${inc.statusLabel}</span>
-        </div>
-      </div>
-    `;
+                <div class="incident-icon">${inc.icon}</div>
+                <div class="incident-info">
+                    <div class="incident-type">${inc.label}</div>
+                    <div class="incident-loc">📍 ${inc.location}</div>
+                    <div class="incident-meta">
+                        <span class="incident-time">🕐 ${inc.time}</span>
+                        <span class="incident-badge ${badgeClass}">${inc.statusLabel}</span>
+                    </div>
+                </div>
+            `;
             item.addEventListener('click', () => openDetail(inc.id));
 
             const firstItem = listEl.querySelector('.incident-item');
@@ -1583,9 +1535,9 @@
                 .bindPopup(`<b style="color:${inc.colorClass === 'danger' ? '#ff2d55' : inc.colorClass === 'accent' ? '#00e5ff' : '#ffcc00'}">${inc.label}</b><br>${inc.description}`);
             marker.on('click', () => openDetail(inc.id));
         }
+
         function setFilter(type) {
             currentFilter = type;
-
             document.getElementById('filter-all').className = 'filter-btn' + (type === 'all' ? ' active-all' : '');
             document.getElementById('filter-fire').className = 'filter-btn' + (type === 'fire' ? ' active-fire' : '');
             document.getElementById('filter-flood').className = 'filter-btn' + (type === 'flood' ? ' active-flood' : '');
@@ -1602,12 +1554,12 @@
                 item.classList.add('hidden');
             }
         }
+
         function openDetail(incidentId) {
             const inc = incidents.find(i => i.id === incidentId);
             if (!inc) return;
 
             selectedIncidentId = incidentId;
-
             document.querySelectorAll('.incident-item').forEach(el => el.classList.remove('selected'));
             const sel = document.querySelector(`.incident-item[data-id="${incidentId}"]`);
             if (sel) sel.classList.add('selected');
@@ -1615,16 +1567,15 @@
             const titleColor = inc.colorClass === 'danger' ? 'var(--danger)' : inc.colorClass === 'accent' ? 'var(--accent)' : 'var(--warn)';
 
             document.getElementById('detail-container').innerHTML = `
-      <div class="detail-title-h" style="color:${titleColor}">${inc.icon} ${inc.label}</div>
-      <div class="detail-sub-h">Báo cáo lúc ${inc.time} — ID: ${inc.id}</div>
-      <div class="info-row"><span class="info-key">VỊ TRÍ</span><span class="info-val">${inc.location}</span></div>
-      <div class="info-row"><span class="info-key">TÌNH TRẠNG</span><span class="info-val" style="color:${titleColor}">${inc.description}</span></div>
-      <div class="info-row"><span class="info-key">TRẠNG THÁI</span><span class="info-val">${inc.statusLabel}</span></div>
-      <div class="info-row"><span class="info-key">LIÊN HỆ</span><span class="info-val">${inc.phone || 'Không có'}</span></div>
-      <div class="info-row"><span class="info-key">NGUỒN TIN</span><span class="info-val">Cộng đồng</span></div>
-      ${inc.mediaHTML}
-    `;
-
+                <div class="detail-title-h" style="color:${titleColor}">${inc.icon} ${inc.label}</div>
+                <div class="detail-sub-h">Báo cáo lúc ${inc.time} — ID: ${inc.id}</div>
+                <div class="info-row"><span class="info-key">VỊ TRÍ</span><span class="info-val">${inc.location}</span></div>
+                <div class="info-row"><span class="info-key">TÌNH TRẠNG</span><span class="info-val" style="color:${titleColor}">${inc.description}</span></div>
+                <div class="info-row"><span class="info-key">TRẠNG THÁI</span><span class="info-val">${inc.statusLabel}</span></div>
+                <div class="info-row"><span class="info-key">LIÊN HỆ</span><span class="info-val">${inc.phone || 'Không có'}</span></div>
+                <div class="info-row"><span class="info-key">NGUỒN TIN</span><span class="info-val">Cộng đồng</span></div>
+                ${inc.mediaHTML}
+            `;
             document.getElementById('detail-view').classList.remove('hidden');
 
             if (map) {
@@ -1641,7 +1592,7 @@
         function addPoints(pts) {
             contributionPoints += pts;
             updatePointsUI();
-            
+
             const popup = document.createElement('div');
             popup.className = 'points-popup';
             popup.textContent = `+${pts} ⭐ ĐIỂM ĐÓNG GÓP`;
@@ -1689,7 +1640,7 @@
         function submitFeedback() {
             const content = document.getElementById('feedback-content').value.trim();
             const btn = document.querySelector('#feedbackModal .btn-submit');
-            
+
             if (!content) {
                 alert("Bạn chưa nhập nội dung góp ý nè! 😅");
                 return;
@@ -1701,12 +1652,12 @@
                 document.getElementById('feedback-content').value = "";
                 closeFeedbackModal();
                 btn.innerHTML = "GỬI Ý KIẾN";
-                addPoints(5); 
+                addPoints(5);
             }, 1000);
         }
         /* -------------------------------------- */
 
-        /* --- JS CHO TÍNH NĂNG CỬA HÀNG (MỚI) --- */
+        /* --- JS CHO TÍNH NĂNG CỬA HÀNG --- */
         function openStoreModal() {
             document.getElementById('storeModal').classList.add('open');
             renderStore();
@@ -1740,7 +1691,7 @@
             if (!item) return;
 
             if (contributionPoints >= item.price) {
-                if(confirm(`Bạn có muốn đổi ${item.price} điểm lấy "${item.name}" không?`)) {
+                if (confirm(`Bạn có muốn đổi ${item.price} điểm lấy "${item.name}" không?`)) {
                     contributionPoints -= item.price;
                     updatePointsUI();
                     alert(`✅ Chúc mừng! Bạn đã nhận được: ${item.name}`);
@@ -1815,7 +1766,6 @@
                 const now = new Date();
                 const timeStr = now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
 
-
                 let targetLat = 10.8231, targetLng = 106.6297;
                 const matches = locInputVal.match(/(\d+\.\d+).*?(\d+\.\d+)/);
                 if (matches) { targetLat = parseFloat(matches[1]); targetLng = parseFloat(matches[2]); }
@@ -1859,7 +1809,6 @@
             }, 1000);
         }
     </script>
-
 </body>
 
 </html>
