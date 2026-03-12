@@ -205,15 +205,8 @@
         }
 
         @keyframes pulse {
-
-            0%,
-            100% {
-                filter: drop-shadow(0 0 5px var(--danger));
-            }
-
-            50% {
-                filter: drop-shadow(0 0 15px var(--danger));
-            }
+            0%, 100% { filter: drop-shadow(0 0 5px var(--danger)); }
+            50% { filter: drop-shadow(0 0 15px var(--danger)); }
         }
 
         .logo-text {
@@ -241,17 +234,9 @@
             text-align: center;
         }
 
-        .stat-val.danger {
-            color: var(--danger);
-        }
-
-        .stat-val.warn {
-            color: var(--warn);
-        }
-
-        .stat-val.gold {
-            color: var(--gold);
-        }
+        .stat-val.danger { color: var(--danger); }
+        .stat-val.warn { color: var(--warn); }
+        .stat-val.gold { color: var(--gold); }
 
         .stat-label {
             color: var(--muted);
@@ -294,7 +279,6 @@
             box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
         }
 
-        /* -------------------- */
         .btn-report {
             background: var(--safe);
             color: #000;
@@ -444,29 +428,10 @@
             text-align: center;
         }
 
-        .filter-btn.active-all {
-            border-color: var(--text);
-            color: var(--text);
-            background: rgba(255, 255, 255, 0.07);
-        }
-
-        .filter-btn.active-fire {
-            border-color: var(--danger);
-            color: var(--danger);
-            background: rgba(255, 45, 85, 0.1);
-        }
-
-        .filter-btn.active-flood {
-            border-color: var(--accent);
-            color: var(--accent);
-            background: rgba(0, 229, 255, 0.1);
-        }
-
-        .filter-btn.active-traffic {
-            border-color: var(--warn);
-            color: var(--warn);
-            background: rgba(255, 204, 0, 0.1);
-        }
+        .filter-btn.active-all { border-color: var(--text); color: var(--text); background: rgba(255, 255, 255, 0.07); }
+        .filter-btn.active-fire { border-color: var(--danger); color: var(--danger); background: rgba(255, 45, 85, 0.1); }
+        .filter-btn.active-flood { border-color: var(--accent); color: var(--accent); background: rgba(0, 229, 255, 0.1); }
+        .filter-btn.active-traffic { border-color: var(--warn); color: var(--warn); background: rgba(255, 204, 0, 0.1); }
 
         .incident-list {
             flex: 1;
@@ -491,603 +456,137 @@
             animation: slideIn 0.4s ease;
         }
 
-        .incident-item:hover {
-            background: rgba(255, 255, 255, 0.04);
-            transform: translateX(2px);
-        }
+        .incident-item:hover { background: rgba(255, 255, 255, 0.04); transform: translateX(2px); }
+        .incident-item.selected { background: rgba(0, 229, 255, 0.06); border-color: rgba(0, 229, 255, 0.3); border-left-color: var(--accent); }
+        .incident-item[data-type="fire"] { border-left-color: var(--danger); }
+        .incident-item[data-type="flood"] { border-left-color: var(--accent); }
+        .incident-item[data-type="traffic"] { border-left-color: var(--warn); }
+        .incident-item.hidden { display: none; }
 
-        .incident-item.selected {
-            background: rgba(0, 229, 255, 0.06);
-            border-color: rgba(0, 229, 255, 0.3);
-            border-left-color: var(--accent);
-        }
+        .incident-icon { font-size: 22px; flex-shrink: 0; margin-top: 1px; }
+        .incident-info { flex: 1; min-width: 0; }
+        .incident-type { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 1px; color: #fff; margin-bottom: 2px; }
+        .incident-loc { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
+        .incident-meta { display: flex; align-items: center; gap: 8px; }
+        .incident-time { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); }
 
-        .incident-item[data-type="fire"] {
-            border-left-color: var(--danger);
-        }
+        .incident-badge { font-family: 'Space Mono', monospace; font-size: 9px; padding: 1px 6px; border-radius: 2px; text-transform: uppercase; letter-spacing: 1px; }
+        .badge-processing { background: rgba(255, 204, 0, 0.15); color: var(--warn); border: 1px solid rgba(255, 204, 0, 0.3); }
+        .badge-done { background: rgba(0, 230, 118, 0.12); color: var(--safe); border: 1px solid rgba(0, 230, 118, 0.3); }
+        .badge-urgent { background: rgba(255, 45, 85, 0.15); color: var(--danger); border: 1px solid rgba(255, 45, 85, 0.3); }
 
-        .incident-item[data-type="flood"] {
-            border-left-color: var(--accent);
-        }
-
-        .incident-item[data-type="traffic"] {
-            border-left-color: var(--warn);
-        }
-
-        .incident-item.hidden {
-            display: none;
-        }
-
-        .incident-icon {
-            font-size: 22px;
-            flex-shrink: 0;
-            margin-top: 1px;
-        }
-
-        .incident-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .incident-type {
-            font-family: 'Barlow Condensed', sans-serif;
-            font-size: 14px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: #fff;
-            margin-bottom: 2px;
-        }
-
-        .incident-loc {
-            font-size: 11px;
-            color: var(--muted);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            margin-bottom: 4px;
-        }
-
-        .incident-meta {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .incident-time {
-            font-family: 'Space Mono', monospace;
-            font-size: 10px;
-            color: var(--muted);
-        }
-
-        .incident-badge {
-            font-family: 'Space Mono', monospace;
-            font-size: 9px;
-            padding: 1px 6px;
-            border-radius: 2px;
-            text-transform: uppercase;            letter-spacing: 1px;
-        }
-
-        .badge-processing {
-            background: rgba(255, 204, 0, 0.15);
-            color: var(--warn);
-            border: 1px solid rgba(255, 204, 0, 0.3);
-        }
-
-        .badge-done {
-            background: rgba(0, 230, 118, 0.12);
-            color: var(--safe);
-            border: 1px solid rgba(0, 230, 118, 0.3);
-        }
-
-        .badge-urgent {
-            background: rgba(255, 45, 85, 0.15);
-            color: var(--danger);
-            border: 1px solid rgba(255, 45, 85, 0.3);
-        }
-
-        .detail-view {
-            position: absolute;
-            inset: 0;
-            background: var(--panel);
-            display: flex;
-            flex-direction: column;
-            animation: slideInRight 0.3s ease;
-            z-index: 5;
-        }
+        .detail-view { position: absolute; inset: 0; background: var(--panel); display: flex; flex-direction: column; animation: slideInRight 0.3s ease; z-index: 5; }
 
         @keyframes slideInRight {
-            from {
-                transform: translateX(100%);
-            }
-
-            to {
-                transform: translateX(0);
-            }
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
         }
 
-        .detail-view.hidden {
-            display: none;
-        }
+        .detail-view.hidden { display: none; }
 
-        .detail-header-bar {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 15px;
-            border-bottom: 1px solid var(--border);
-            background: rgba(6, 8, 16, 0.9);
-            flex-shrink: 0;
-        }
+        .detail-header-bar { display: flex; align-items: center; gap: 10px; padding: 10px 15px; border-bottom: 1px solid var(--border); background: rgba(6, 8, 16, 0.9); flex-shrink: 0; }
+        .btn-back { background: none; border: 1px solid var(--border); color: var(--muted); padding: 5px 12px; font-family: 'Barlow Condensed', sans-serif; font-size: 13px; cursor: pointer; letter-spacing: 1px; border-radius: 3px; transition: all 0.2s; }
+        .btn-back:hover { border-color: var(--accent); color: var(--accent); }
 
-        .btn-back {
-            background: none;
-            border: 1px solid var(--border);
-            color: var(--muted);
-            padding: 5px 12px;
-            font-family: 'Barlow Condensed', sans-serif;
-            font-size: 13px;
-            cursor: pointer;
-            letter-spacing: 1px;
-            border-radius: 3px;
-            transition: all 0.2s;
-        }
+        .detail-content { flex: 1; padding: 20px; overflow-y: auto; }
+        .detail-title-h { font-family: 'Barlow Condensed', sans-serif; font-size: 26px; font-weight: 900; margin-bottom: 4px; }
+        .detail-sub-h { font-size: 11px; color: var(--muted); margin-bottom: 18px; font-family: 'Space Mono', monospace; }
+        
+        .info-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 12px; }
+        .info-key { color: var(--muted); }
+        .info-val { color: #fff; font-family: 'Space Mono', monospace; text-align: right; max-width: 200px; word-break: break-word; }
 
-        .btn-back:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-
-        .detail-content {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .detail-title-h {
-            font-family: 'Barlow Condensed', sans-serif;
-            font-size: 26px;
-            font-weight: 900;
-            margin-bottom: 4px;
-        }
-
-        .detail-sub-h {
-            font-size: 11px;
-            color: var(--muted);
-            margin-bottom: 18px;            font-family: 'Space Mono', monospace;
-        }
-
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            font-size: 12px;
-        }
-
-        .info-key {
-            color: var(--muted);
-        }
-
-        .info-val {
-            color: #fff;
-            font-family: 'Space Mono', monospace;
-            text-align: right;
-            max-width: 200px;
-            word-break: break-word;
-        }
-
-        .evidence-container {
-            margin-top: 15px;
-            border: 1px solid var(--border);
-            padding: 5px;
-            border-radius: 4px;
-            background: #000;
-        }
-
-        .evidence-media {
-            width: 100%;
-            max-height: 200px;
-            object-fit: cover;
-            display: block;
-            border-radius: 2px;
-        }
-
-        .evidence-label {
-            font-size: 10px;
-            color: var(--accent);
-            margin-bottom: 5px;
-            font-family: 'Barlow Condensed', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        .evidence-container { margin-top: 15px; border: 1px solid var(--border); padding: 5px; border-radius: 4px; background: #000; }
+        .evidence-media { width: 100%; max-height: 200px; object-fit: cover; display: block; border-radius: 2px; }
+        .evidence-label { font-size: 10px; color: var(--accent); margin-bottom: 5px; font-family: 'Barlow Condensed', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
 
         .points-popup {
-            position: fixed;
-            top: 80px;
-            right: 20px;
-            z-index: 9000;
+            position: fixed; top: 80px; right: 20px; z-index: 9000;
             background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.05));
-            border: 1px solid #ffd700;
-            color: #ffd700;
-            padding: 10px 20px;
-            font-family: 'Barlow Condensed', sans-serif;
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            border-radius: 4px;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-            animation: pointsAnim 2.5s ease forwards;
-            pointer-events: none;
+            border: 1px solid #ffd700; color: #ffd700; padding: 10px 20px;
+            font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 2px;
+            border-radius: 4px; box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            animation: pointsAnim 2.5s ease forwards; pointer-events: none;
         }
 
         @keyframes pointsAnim {
-            0% {
-                opacity: 0;
-                transform: translateY(10px) scale(0.9);
-            }
-
-            20% {
-                opacity: 1;
-                transform: translateY(-5px) scale(1.05);
-            }
-
-            70% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-
-            100% {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
+            0% { opacity: 0; transform: translateY(10px) scale(0.9); }
+            20% { opacity: 1; transform: translateY(-5px) scale(1.05); }
+            70% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-20px); }
         }
 
         @keyframes slideIn {
-            from {
-                transform: translateX(-20px);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
 
-        .ticker-bar {
-            background: var(--panel);
-            padding: 8px 20px;
-            border-top: 1px solid var(--border);
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            font-size: 10px;
-            flex-shrink: 0;
-        }
+        .ticker-bar { background: var(--panel); padding: 8px 20px; border-top: 1px solid var(--border); display: flex; gap: 15px; align-items: center; font-size: 10px; flex-shrink: 0; }
 
         /* --- MODAL --- */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(5px);
-            z-index: 1000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-        }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px); z-index: 1000; display: none; align-items: center; justify-content: center; }
+        .modal-overlay.open { display: flex; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .modal-overlay.open {
-            display: flex;
-            animation: fadeIn 0.3s;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        .modal-box {
-            background: var(--panel);
-            border: 1px solid var(--accent);
-            width: 95%;
-            max-width: 500px;
-            max-height: 90vh;            overflow-y: auto;            box-shadow: 0 0 30px rgba(0, 229, 255, 0.15);
-        }
-
-        .modal-header {
-            padding: 15px 20px;
-            background: rgba(0, 229, 255, 0.1);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-title {
-            font-family: 'Barlow Condensed', sans-serif;
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--accent);
-            text-transform: uppercase;
-        }
-
-        .btn-close {
-            background: none;
-            border: none;
-            color: var(--muted);
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        .modal-body {
-            padding: 20px;
-        }
+        .modal-box { background: var(--panel); border: 1px solid var(--accent); width: 95%; max-width: 500px; max-height: 90vh; overflow-y: auto; box-shadow: 0 0 30px rgba(0, 229, 255, 0.15); }
+        .modal-header { padding: 15px 20px; background: rgba(0, 229, 255, 0.1); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .modal-title { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700; color: var(--accent); text-transform: uppercase; }
+        .btn-close { background: none; border: none; color: var(--muted); font-size: 24px; cursor: pointer; }
+        .modal-body { padding: 20px; }
 
         /* --- STORE STYLES --- */
-        .store-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-        }
+        .store-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .store-item { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); border-radius: 4px; padding: 15px; text-align: center; transition: all 0.2s; }
+        .store-item:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--accent); transform: translateY(-3px); }
+        .item-icon { font-size: 32px; margin-bottom: 10px; display: block; }
+        .item-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; color: #fff; margin-bottom: 5px; font-size: 16px; }
+        .item-price { font-family: 'Space Mono', monospace; color: var(--gold); font-size: 12px; margin-bottom: 12px; }
+        .btn-buy { width: 100%; background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 6px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+        .btn-buy:hover { background: var(--gold); color: #000; }
 
-        .store-item {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            padding: 15px;
-            text-align: center;
-            transition: all 0.2s;
-        }
+        /* --- FORM --- */
+        .form-group { margin-bottom: 15px; }
+        .form-label { display: block; font-size: 12px; margin-bottom: 5px; color: var(--text); font-weight: 600; }
+        .chip-group { display: flex; gap: 8px; }
+        .chip-radio { display: none; }
+        .chip-label { flex: 1; padding: 10px; text-align: center; background: var(--input-bg); border: 1px solid var(--border); color: var(--muted); cursor: pointer; font-size: 12px; font-weight: 600; border-radius: 4px; transition: 0.2s; }
+        
+        .chip-radio:checked+.chip-label { border-color: currentColor; box-shadow: 0 0 10px currentColor; }
+        #cat-fire:checked+.chip-label { color: var(--danger); background: rgba(255, 45, 85, 0.1); }
+        #cat-flood:checked+.chip-label { color: var(--accent); background: rgba(0, 229, 255, 0.1); }
+        #cat-traffic:checked+.chip-label { color: var(--warn); background: rgba(255, 204, 0, 0.1); }
 
-        .store-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: var(--accent);
-            transform: translateY(-3px);
-        }
+        .form-input, .form-textarea { width: 100%; background: var(--input-bg); border: 1px solid var(--border); color: #fff; padding: 10px; font-family: 'Noto Sans Vietnamese', sans-serif; font-size: 13px; border-radius: 4px; outline: none; }
+        .form-input:focus { border-color: var(--safe); }
+        .btn-geo { margin-left: 5px; padding: 0 15px; background: var(--safe); border: none; border-radius: 4px; font-weight: 700; cursor: pointer; white-space: nowrap; }
 
-        .item-icon {
-            font-size: 32px;
-            margin-bottom: 10px;
-            display: block;
-        }
+        .file-drop { border: 1px dashed var(--muted); background: rgba(0, 0, 0, 0.2); padding: 15px; border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; cursor: pointer; transition: all 0.2s; text-align: center; }
+        .file-drop:hover { border-color: var(--safe); background: rgba(0, 230, 118, 0.05); }
+        .file-preview-text { font-size: 11px; color: var(--safe); margin-top: 5px; }
 
-        .item-name {
-            font-family: 'Barlow Condensed', sans-serif;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 5px;
-            font-size: 16px;
-        }
+        .btn-submit { width: 100%; padding: 14px; background: var(--safe); border: none; font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        .btn-submit:hover { background: #fff; }
 
-        .item-price {
-            font-family: 'Space Mono', monospace;
-            color: var(--gold);
-            font-size: 12px;
-            margin-bottom: 12px;
-        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: var(--border); }
+        .map-helper { font-size: 10px; color: var(--accent); margin-top: 4px; font-style: italic; }
 
-        .btn-buy {
-            width: 100%;
-            background: transparent;
-            border: 1px solid var(--gold);
-            color: var(--gold);
-            padding: 6px;
-            font-family: 'Barlow Condensed', sans-serif;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
+        .count-badge { font-family: 'Space Mono', monospace; font-size: 10px; padding: 2px 7px; background: rgba(0, 229, 255, 0.1); border: 1px solid rgba(0, 229, 255, 0.2); border-radius: 10px; color: var(--accent); }
+        .empty-list { flex: 1; display: flex; align-items: center; justify-content: center; color: var(--muted); text-align: center; font-family: 'Space Mono', monospace; font-size: 10px; padding: 20px; }
 
-        .btn-buy:hover {
-            background: var(--gold);
-            color: #000;
-        }
+        .btn-clear-all { background: transparent; color: var(--danger); border: 1px solid var(--danger); padding: 2px 8px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 1px; border-radius: 3px; cursor: pointer; transition: all 0.2s; }
+        .btn-clear-all:hover { background: rgba(255, 45, 85, 0.1); box-shadow: 0 0 10px rgba(255, 45, 85, 0.3); }
 
-        /* -------------------- */
-        .form-group {
-            margin-bottom: 15px;
-        }
+        /* --- CSS CHO MARKER BẢN ĐỒ --- */
+        .user-loc-icon { font-size: 35px; filter: drop-shadow(0 0 12px var(--safe)); animation: bounceMarker 0.8s infinite alternate ease-in-out; text-align: center; }
+        @keyframes bounceMarker { from { transform: translateY(0); } to { transform: translateY(-12px); } }
 
-        .form-label {
-            display: block;
-            font-size: 12px;
-            margin-bottom: 5px;
-            color: var(--text);
-            font-weight: 600;
-        }
-
-        .chip-group {
-            display: flex;
-            gap: 8px;
-        }
-
-        .chip-radio {
-            display: none;
-        }
-
-        .chip-label {
-            flex: 1;
-            padding: 10px;
-            text-align: center;
-            background: var(--input-bg);
-            border: 1px solid var(--border);
-            color: var(--muted);
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-            border-radius: 4px;
-            transition: 0.2s;
-        }
-
-        .chip-radio:checked+.chip-label {
-            border-color: currentColor;
-            box-shadow: 0 0 10px currentColor;
-        }
-
-        #cat-fire:checked+.chip-label {
-            color: var(--danger);
-            background: rgba(255, 45, 85, 0.1);
-        }
-
-        #cat-flood:checked+.chip-label {
-            color: var(--accent);
-            background: rgba(0, 229, 255, 0.1);
-        }
-
-        #cat-traffic:checked+.chip-label {
-            color: var(--warn);
-            background: rgba(255, 204, 0, 0.1);
-        }
-
-        .form-input,
-        .form-textarea {
-            width: 100%;
-            background: var(--input-bg);
-            border: 1px solid var(--border);
-            color: #fff;
-            padding: 10px;
-            font-family: 'Noto Sans Vietnamese', sans-serif;
-            font-size: 13px;
-            border-radius: 4px;
-            outline: none;
-        }
-
-        .form-input:focus {
-            border-color: var(--safe);
-        }
-
-        .btn-geo {
-            margin-left: 5px;
-            padding: 0 15px;
-            background: var(--safe);
-            border: none;
-            border-radius: 4px;
-            font-weight: 700;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-
-        .file-drop {
-            border: 1px dashed var(--muted);
-            background: rgba(0, 0, 0, 0.2);
-            padding: 15px;
-            border-radius: 4px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;            cursor: pointer;            transition: all 0.2s;
-            text-align: center;
-        }
-
-        .file-drop:hover {
-            border-color: var(--safe);
-            background: rgba(0, 230, 118, 0.05);
-        }
-
-        .file-preview-text {
-            font-size: 11px;
-            color: var(--safe);
-            margin-top: 5px;
-        }
-
-        .btn-submit {
-            width: 100%;
-            padding: 14px;
-            background: var(--safe);
-            border: none;
-            font-family: 'Barlow Condensed', sans-serif;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .btn-submit:hover {
-            background: #fff;
-        }
-
-        .custom-icon {
-            animation: pulseIcon 1.5s infinite;
-            filter: drop-shadow(0 0 5px red);
-        }
-
-        @keyframes pulseIcon {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.2);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        ::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--border);
-        }
-
-        .map-helper {
-            font-size: 10px;
-            color: var(--accent);
-            margin-top: 4px;
-            font-style: italic;
-        }
-
-        .count-badge {
-            font-family: 'Space Mono', monospace;
-            font-size: 10px;
-            padding: 2px 7px;
-            background: rgba(0, 229, 255, 0.1);
-            border: 1px solid rgba(0, 229, 255, 0.2);
-            border-radius: 10px;
-            color: var(--accent);
-        }
-
-        .empty-list {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--muted);
-            text-align: center;
-            font-family: 'Space Mono', monospace;
-            font-size: 10px;
-            padding: 20px;
-        }
-
-        /* --- NÚT XÓA TẤT CẢ --- */
-        .btn-clear-all {
-            background: transparent;
-            color: var(--danger);
-            border: 1px solid var(--danger);
-            padding: 2px 8px;
-            font-family: 'Barlow Condensed', sans-serif;
-            font-weight: 700;
-            font-size: 11px;
-            letter-spacing: 1px;
-            border-radius: 3px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-clear-all:hover {
-            background: rgba(255, 45, 85, 0.1);
-            box-shadow: 0 0 10px rgba(255, 45, 85, 0.3);
-        }
+        .incident-pin { width: 36px; height: 36px; background: rgba(11, 15, 26, 0.95); border: 2px solid currentColor; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 0 15px currentColor; cursor: pointer; animation: pulseIcon 1.5s infinite; }
+        .incident-pin.danger { color: var(--danger); }
+        .incident-pin.accent { color: var(--accent); }
+        .incident-pin.warn { color: var(--warn); }
+        
+        @keyframes pulseIcon { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
     </style>
 </head>
 
@@ -1139,8 +638,7 @@
                 <button class="btn-store" onclick="openStoreModal()">🛍️</button>
             </div>
             <div style="display:flex; align-items:center; gap:10px;">
-                <div id="user-display"
-                    style="font-family:'Space Mono',monospace; font-size:10px; color:var(--accent); display:none;">
+                <div id="user-display" style="font-family:'Space Mono',monospace; font-size:10px; color:var(--accent); display:none;">
                     <div style="color:var(--muted); letter-spacing:1px;">ĐĂNG NHẬP AS</div>
                     <div id="display-username" style="font-weight:700; letter-spacing:2px;"></div>
                 </div>
@@ -1168,8 +666,7 @@
                 </div>
 
                 <div class="incident-list" id="incident-list">
-                    <div class="empty-list" id="empty-list-msg">[ CHƯA CÓ DỮ LIỆU ]<br>Nhấn "Gửi Phản Ánh" để thêm sự cố
-                    </div>
+                    <div class="empty-list" id="empty-list-msg">[ CHƯA CÓ DỮ LIỆU ]<br>Nhấn "Gửi Phản Ánh" để thêm sự cố</div>
                 </div>
 
                 <div class="detail-view hidden" id="detail-view">
@@ -1177,8 +674,7 @@
                         <button class="btn-back" onclick="closeDetail()">◀ QUAY LẠI</button>
                         <div class="panel-title" style="flex:1; text-align:right;">CHI TIẾT SỰ CỐ</div>
                     </div>
-                    <div class="detail-content" id="detail-container">
-                    </div>
+                    <div class="detail-content" id="detail-container"></div>
                 </div>
             </div>
 
@@ -1216,39 +712,31 @@
                         <label for="cat-traffic" class="chip-label">🚗 Tắc đường</label>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label class="form-label">VỊ TRÍ *</label>
                     <div style="display:flex;">
-                        <input type="text" class="form-input" id="loc-input"
-                            placeholder="Nhập địa chỉ hoặc lấy toạ độ...">
+                        <input type="text" class="form-input" id="loc-input" placeholder="Nhập địa chỉ hoặc lấy toạ độ...">
                         <button class="btn-geo" onclick="getLocation()">📍 Lấy vị trí</button>
                     </div>
                     <div class="map-helper">💡 Mẹo: Bạn có thể click trực tiếp vào Bản đồ để chọn vị trí!</div>
                 </div>
-
                 <div class="form-group">
                     <label class="form-label">MÔ TẢ TÌNH TRẠNG</label>
-                    <textarea class="form-textarea" id="desc-input" rows="3"
-                        placeholder="Mô tả chi tiết sự việc..."></textarea>
+                    <textarea class="form-textarea" id="desc-input" rows="3" placeholder="Mô tả chi tiết sự việc..."></textarea>
                 </div>
-
                 <div class="form-group">
                     <label class="form-label">SỐ ĐIỆN THOẠI LIÊN HỆ</label>
                     <input type="tel" class="form-input" id="phone-input" placeholder="090xxxxxxx">
                 </div>
-
                 <div class="form-group">
                     <label class="form-label">MINH CHỨNG (HÌNH ẢNH / VIDEO)</label>
                     <div class="file-drop" onclick="document.getElementById('modal-file').click()">
                         <span style="font-size:20px">📷</span>
                         <span style="font-size:12px; color:var(--muted)">Nhấn để tải tệp lên</span>
                         <span id="file-name" class="file-preview-text"></span>
-                        <input type="file" id="modal-file" style="display:none" accept="image/*,video/*"
-                            onchange="updateFileName(this)">
+                        <input type="file" id="modal-file" style="display:none" accept="image/*,video/*" onchange="updateFileName(this)">
                     </div>
                 </div>
-
                 <button class="btn-submit" onclick="submitReport()">GỬI THÔNG TIN</button>
             </div>
         </div>
@@ -1262,11 +750,8 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label class="form-label" style="font-size: 14px; color: var(--accent);">
-                        Nêu những điều bạn hài lòng / chưa hài lòng về app nha:
-                    </label>
-                    <textarea class="form-textarea" id="feedback-content" rows="6"
-                        placeholder="Ví dụ: Giao diện đẹp nhưng load bản đồ hơi chậm..."></textarea>
+                    <label class="form-label" style="font-size: 14px; color: var(--accent);">Nêu những điều bạn hài lòng / chưa hài lòng về app nha:</label>
+                    <textarea class="form-textarea" id="feedback-content" rows="6" placeholder="Ví dụ: Giao diện đẹp nhưng load bản đồ hơi chậm..."></textarea>
                 </div>
                 <button class="btn-submit" onclick="submitFeedback()">GỬI Ý KIẾN</button>
             </div>
@@ -1280,20 +765,41 @@
                 <button class="btn-close" onclick="closeStoreModal()">×</button>
             </div>
             <div class="modal-body">
-                <div class="store-grid" id="store-container">
-                </div>
+                <div class="store-grid" id="store-container"></div>
             </div>
         </div>
     </div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
+
     <script>
+        // --- KHỞI TẠO FIREBASE ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyDUjChNQOq3TGGEuVJvMieud3oTd5pehAE",
+            authDomain: "appcuuho-38311.firebaseapp.com",
+            projectId: "appcuuho-38311",
+            storageBucket: "appcuuho-38311.firebasestorage.app",
+            messagingSenderId: "365986284659",
+            appId: "1:365986284659:web:69c80198b9baac3a655606",
+            databaseURL: "https://appcuuho-38311-default-rtdb.firebaseio.com" // Đã tự động thêm databaseURL
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
         let map;
         let isLoginMode = true;
         let userLat = null;
         let userLng = null;
         let currentUser = null;
+        let clickMarker = null;
+        let currentFilter = 'all';
+        let contributionPoints = 0;
+        let incidents = [];
+        let selectedIncidentId = null;
 
         window.addEventListener('DOMContentLoaded', () => {
             const saved = localStorage.getItem('cuuho_session');
@@ -1304,30 +810,66 @@
                 document.getElementById('app-content').classList.remove('app-locked');
                 showUserDisplay(username);
                 initMap();
-                loadIncidentsFromStorage();
-                updateStats();
-                updateIncidentCount();
+                
+                // Gọi hàm load từ Firebase thay vì LocalStorage
+                loadIncidentsFromFirebase();
             }
         });
-        let clickMarker = null;
-        let currentFilter = 'all';
-        let contributionPoints = 0;
-        let incidents = [];
 
-        // --- QUẢN LÝ DỮ LIỆU SỰ CỐ ---
-        const STORAGE_KEY = 'cuuho_incidents_data';
+        // Tạo Icon tuỳ chỉnh cho Vị trí người dùng / Vị trí click
+        const myLocIcon = L.divIcon({
+            className: 'custom-div-icon',
+            html: `<div class="user-loc-icon">📍</div>`,
+            iconSize: [35, 35],
+            iconAnchor: [17, 35],
+            popupAnchor: [0, -35]
+        });
 
-        function saveIncidentsToStorage() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(incidents));
+        function initMap() {
+            map = L.map('interactive-map').setView([10.8231, 106.6297], 12);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+
+            map.on('click', function (e) {
+                const clickedLat = e.latlng.lat;
+                const clickedLng = e.latlng.lng;
+                const locInput = document.getElementById('loc-input');
+                locInput.value = `${clickedLat.toFixed(6)}, ${clickedLng.toFixed(6)}`;
+                
+                if (clickMarker) map.removeLayer(clickMarker);
+                
+                clickMarker = L.marker([clickedLat, clickedLng], { icon: myLocIcon })
+                    .addTo(map).bindPopup("Vị trí đã chọn").openPopup();
+            });
         }
 
-        function loadIncidentsFromStorage() {
-            const data = localStorage.getItem(STORAGE_KEY);
-            if (data) {
-                incidents = JSON.parse(data);
+        // --- HÀM LOAD DỮ LIỆU REAL-TIME TỪ FIREBASE ---
+        function loadIncidentsFromFirebase() {
+            db.ref('incidents').on('value', (snapshot) => {
+                const data = snapshot.val();
+                incidents = [];
+                
+                // Xóa tất cả các marker cũ trên bản đồ
+                if (map) {
+                    map.eachLayer((layer) => {
+                        if (layer instanceof L.Marker && layer !== clickMarker) {
+                            map.removeLayer(layer);
+                        }
+                    });
+                }
+
                 const listEl = document.getElementById('incident-list');
                 listEl.innerHTML = '';
-                if (incidents.length > 0) {
+
+                if (data) {
+                    // Chuyển Object của Firebase thành Mảng (Array)
+                    Object.keys(data).forEach(key => {
+                        incidents.push(data[key]);
+                    });
+                    
+                    // Sắp xếp sự cố mới nhất (ID lớn nhất) lên đầu danh sách
+                    incidents.sort((a, b) => b.id.localeCompare(a.id));
+
+                    // Vẽ lại danh sách và Bản đồ
                     incidents.forEach(inc => {
                         renderIncidentToList(inc);
                         addIncidentMarker(inc);
@@ -1335,55 +877,142 @@
                 } else {
                     listEl.innerHTML = '<div class="empty-list" id="empty-list-msg">[ CHƯA CÓ DỮ LIỆU ]<br>Nhấn "Gửi Phản Ánh" để thêm sự cố</div>';
                 }
-            }
+
+                updateIncidentCount();
+                updateStats();
+            });
         }
 
-        // --- HÀM XÓA TẤT CẢ SỰ CỐ ---
+        // --- HÀM XÓA TẤT CẢ TỪ FIREBASE ---
         function clearAllIncidents() {
             if (incidents.length === 0) {
                 alert("Danh sách đang trống, không có gì để xóa!");
                 return;
             }
 
-            if (!confirm("⚠️ CẢNH BÁO: Bạn có chắc chắn muốn xóa TẤT CẢ các sự cố trên bản đồ và danh sách? Hành động này không thể hoàn tác!")) {
+            if (!confirm("⚠️ CẢNH BÁO: Bạn có chắc chắn muốn xóa TẤT CẢ các sự cố trên bản đồ? Hành động này không thể hoàn tác!")) {
                 return;
             }
 
-            // Xóa mảng dữ liệu và lưu xuống LocalStorage
-            incidents = [];
-            saveIncidentsToStorage();
+            // Xóa nhánh 'incidents' trên Firebase. Sau khi xóa, hàm .on('value') ở trên sẽ tự động dọn sạch giao diện
+            db.ref('incidents').remove().then(() => {
+                closeDetail();
+            }).catch((err) => {
+                alert("Có lỗi xảy ra khi xoá: " + err.message);
+            });
+        }
 
-            // Xóa các marker của sự cố trên bản đồ
-            if (map) {
-                map.eachLayer((layer) => {
-                    if (layer instanceof L.Marker && layer !== clickMarker) {
-                        map.removeLayer(layer);
-                    }
-                });
+        function renderIncidentToList(inc) {
+            const listEl = document.getElementById('incident-list');
+            const emptyMsg = document.getElementById('empty-list-msg');
+            if (emptyMsg) emptyMsg.remove();
 
-                // Nếu có popup click thì đóng lại (tuỳ chọn)
-                if (clickMarker) {
-                    map.removeLayer(clickMarker);
-                    clickMarker = null;
+            const badgeClass = inc.status === 'done' ? 'badge-done' : inc.status === 'urgent' ? 'badge-urgent' : 'badge-processing';
+
+            const item = document.createElement('div');
+            item.className = 'incident-item';
+            item.dataset.type = inc.type;
+            item.dataset.id = inc.id;
+            item.innerHTML = `
+                <div class="incident-icon">${inc.icon}</div>
+                <div class="incident-info">
+                    <div class="incident-type">${inc.label}</div>
+                    <div class="incident-loc">📍 ${inc.location}</div>
+                    <div class="incident-meta">
+                        <span class="incident-time">🕐 ${inc.time}</span>
+                        <span class="incident-badge ${badgeClass}">${inc.statusLabel}</span>
+                    </div>
+                </div>
+            `;
+            item.addEventListener('click', () => openDetail(inc.id));
+            listEl.appendChild(item); // appendChild vì danh sách đã được sắp xếp từ Firebase
+            applyFilterToItem(item);
+        }
+
+        function addIncidentMarker(inc) {
+            if (!map) return;
+            const icon = L.divIcon({
+                className: 'custom-div-icon',
+                html: `<div class="incident-pin ${inc.colorClass}">${inc.icon}</div>`,
+                iconSize: [36, 36],
+                iconAnchor: [18, 18],
+                popupAnchor: [0, -20]
+            });
+            const marker = L.marker([inc.lat, inc.lng], { icon })
+                .addTo(map)
+                .bindPopup(`<b style="color:${inc.colorClass === 'danger' ? '#ff2d55' : inc.colorClass === 'accent' ? '#00e5ff' : '#ffcc00'}">${inc.label}</b><br>${inc.description}`);
+            marker.on('click', () => openDetail(inc.id));
+        }
+
+        function submitReport() {
+            const btn = document.querySelector('.btn-submit');
+            const type = document.querySelector('input[name="cat"]:checked').value;
+            const desc = document.getElementById('desc-input').value || "Không có mô tả chi tiết";
+            const locInputVal = document.getElementById('loc-input').value || "Vị trí không xác định";
+            const phone = document.getElementById('phone-input').value || "";
+            const fileInput = document.getElementById('modal-file');
+
+            let mediaHTML = "";
+            if (fileInput.files && fileInput.files[0]) {
+                const file = fileInput.files[0];
+                const url = URL.createObjectURL(file);
+                if (file.type.startsWith('video')) {
+                    mediaHTML = `<div class="evidence-container"><div class="evidence-label">MINH CHỨNG (VIDEO)</div><video src="${url}" controls class="evidence-media"></video></div>`;
+                } else {
+                    mediaHTML = `<div class="evidence-container"><div class="evidence-label">MINH CHỨNG (ẢNH)</div><img src="${url}" class="evidence-media"></div>`;
                 }
             }
 
-            // Làm trống giao diện danh sách bên trái
-            const listEl = document.getElementById('incident-list');
-            listEl.innerHTML = '<div class="empty-list" id="empty-list-msg">[ CHƯA CÓ DỮ LIỆU ]<br>Nhấn "Gửi Phản Ánh" để thêm sự cố</div>';
+            btn.innerHTML = 'ĐANG GỬI DỮ LIỆU...';
 
-            // Đóng bảng chi tiết nếu đang mở
-            closeDetail();
+            let label = "SỰ CỐ", icon = "⚠️", colorClass = "danger";
+            if (type === 'fire') { label = "HỎA HOẠN"; icon = "🔥"; colorClass = "danger"; }
+            if (type === 'flood') { label = "NGẬP LỤT"; icon = "💧"; colorClass = "accent"; }
+            if (type === 'traffic') { label = "TẮC ĐƯỜNG"; icon = "🚗"; colorClass = "warn"; }
 
-            // Cập nhật lại các bộ đếm
-            updateIncidentCount();
-            updateStats();
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+
+            let targetLat = 10.8231, targetLng = 106.6297;
+            const matches = locInputVal.match(/(\d+\.\d+).*?(\d+\.\d+)/);
+            if (matches) { targetLat = parseFloat(matches[1]); targetLng = parseFloat(matches[2]); }
+
+            const newInc = {
+                id: `inc-${Date.now()}`,
+                type, label, icon, colorClass,
+                location: locInputVal,
+                description: desc,
+                time: timeStr,
+                phone,
+                status: 'urgent',
+                statusLabel: 'KHẨN CẤP',
+                lat: targetLat,
+                lng: targetLng,
+                mediaHTML,
+            };
+
+            // Đẩy dữ liệu lên Firebase
+            db.ref('incidents/' + newInc.id).set(newInc).then(() => {
+                addPoints(10);
+                closeReportModal();
+                setTimeout(() => openDetail(newInc.id), 300);
+
+                btn.innerHTML = 'GỬI THÔNG TIN';
+                document.getElementById('desc-input').value = "";
+                document.getElementById('file-name').textContent = "";
+                document.getElementById('modal-file').value = "";
+                document.getElementById('loc-input').value = "";
+                document.getElementById('phone-input').value = "";
+                const geoBtn = document.querySelector('.btn-geo');
+                geoBtn.innerHTML = '📍 Lấy vị trí';
+                geoBtn.style.background = ''; geoBtn.style.color = '';
+            }).catch((err) => {
+                alert("Lỗi khi gửi lên hệ thống: " + err.message);
+                btn.innerHTML = 'GỬI THÔNG TIN';
+            });
         }
-        // ---------------------------
 
-        let selectedIncidentId = null;
-
-        // Dữ liệu cửa hàng
+        // --- CÁC HÀM UI CŨ GIỮ NGUYÊN ---
         const storeItems = [
             { id: 1, name: "Thẻ Cào 10K", price: 50, icon: "🎫" },
             { id: 2, name: "Voucher Coffee", price: 100, icon: "☕" },
@@ -1423,9 +1052,7 @@
                         document.getElementById('app-content').classList.remove('app-locked');
                         showUserDisplay(user);
                         initMap();
-                        loadIncidentsFromStorage();
-                        updateStats();
-                        updateIncidentCount();
+                        loadIncidentsFromFirebase();
                     }, 800);
                 } else {
                     localStorage.setItem('cuuho_session', JSON.stringify({ username: user }));
@@ -1458,61 +1085,12 @@
             document.getElementById('stat-warn').textContent = '0';
             document.getElementById('points-display').textContent = '0';
             contributionPoints = 0;
-            document.getElementById('incident-list').innerHTML =
-                '<div class="empty-list" id="empty-list-msg">[ CHƯA CÓ DỮ LIỆU ]<br>Nhấn "Gửi Phản Ánh" để thêm sự cố</div>';
+            document.getElementById('incident-list').innerHTML = '<div class="empty-list" id="empty-list-msg">[ CHƯA CÓ DỮ LIỆU ]<br>Nhấn "Gửi Phản Ánh" để thêm sự cố</div>';
             document.getElementById('incident-count').textContent = '0';
             const btn = document.getElementById('btn-auth-action');
             btn.innerHTML = 'ĐĂNG NHẬP';
             btn.style.background = '';
             if (map) { map.remove(); map = null; }
-        }
-
-        function initMap() {
-            map = L.map('interactive-map').setView([10.8231, 106.6297], 12);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
-
-            map.on('click', function (e) {
-                const clickedLat = e.latlng.lat;
-                const clickedLng = e.latlng.lng;
-                const locInput = document.getElementById('loc-input');
-                locInput.value = `${clickedLat.toFixed(6)}, ${clickedLng.toFixed(6)}`;
-                if (clickMarker) map.removeLayer(clickMarker);
-                clickMarker = L.marker([clickedLat, clickedLng]).addTo(map).bindPopup("Vị trí đã chọn").openPopup();
-            });
-        }
-
-        function renderIncidentToList(inc) {
-            const listEl = document.getElementById('incident-list');
-            const emptyMsg = document.getElementById('empty-list-msg');
-            if (emptyMsg) emptyMsg.remove();
-
-            const badgeClass = inc.status === 'done' ? 'badge-done' : inc.status === 'urgent' ? 'badge-urgent' : 'badge-processing';
-
-            const item = document.createElement('div');
-            item.className = 'incident-item';
-            item.dataset.type = inc.type;
-            item.dataset.id = inc.id;
-            item.innerHTML = `
-                <div class="incident-icon">${inc.icon}</div>
-                <div class="incident-info">
-                    <div class="incident-type">${inc.label}</div>
-                    <div class="incident-loc">📍 ${inc.location}</div>
-                    <div class="incident-meta">
-                        <span class="incident-time">🕐 ${inc.time}</span>
-                        <span class="incident-badge ${badgeClass}">${inc.statusLabel}</span>
-                    </div>
-                </div>
-            `;
-            item.addEventListener('click', () => openDetail(inc.id));
-
-            const firstItem = listEl.querySelector('.incident-item');
-            if (firstItem) {
-                listEl.insertBefore(item, firstItem);
-            } else {
-                listEl.appendChild(item);
-            }
-
-            applyFilterToItem(item);
         }
 
         function updateIncidentCount() {
@@ -1522,20 +1100,6 @@
             countEl.textContent = currentFilter === 'all' ? total : `${visible}/${total}`;
         }
 
-        function addIncidentMarker(inc) {
-            if (!map) return;
-            const icon = L.divIcon({
-                className: 'custom-icon',
-                html: `<div style="font-size:26px; text-shadow:0 0 10px red; cursor:pointer;">${inc.icon}</div>`,
-                iconSize: [30, 30],
-                iconAnchor: [15, 15]
-            });
-            const marker = L.marker([inc.lat, inc.lng], { icon })
-                .addTo(map)
-                .bindPopup(`<b style="color:${inc.colorClass === 'danger' ? '#ff2d55' : inc.colorClass === 'accent' ? '#00e5ff' : '#ffcc00'}">${inc.label}</b><br>${inc.description}`);
-            marker.on('click', () => openDetail(inc.id));
-        }
-
         function setFilter(type) {
             currentFilter = type;
             document.getElementById('filter-all').className = 'filter-btn' + (type === 'all' ? ' active-all' : '');
@@ -1543,16 +1107,14 @@
             document.getElementById('filter-flood').className = 'filter-btn' + (type === 'flood' ? ' active-flood' : '');
             document.getElementById('filter-traffic').className = 'filter-btn' + (type === 'traffic' ? ' active-traffic' : '');
 
-            document.querySelectorAll('.incident-item').forEach(item => applyFilterToItem(item));
+            document.querySelectorAll('.incident-item').forEach(item => {
+                if (currentFilter === 'all' || item.dataset.type === currentFilter) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
             updateIncidentCount();
-        }
-
-        function applyFilterToItem(item) {
-            if (currentFilter === 'all' || item.dataset.type === currentFilter) {
-                item.classList.remove('hidden');
-            } else {
-                item.classList.add('hidden');
-            }
         }
 
         function openDetail(incidentId) {
@@ -1568,7 +1130,7 @@
 
             document.getElementById('detail-container').innerHTML = `
                 <div class="detail-title-h" style="color:${titleColor}">${inc.icon} ${inc.label}</div>
-                <div class="detail-sub-h">Báo cáo lúc ${inc.time} — ID: ${inc.id}</div>
+                <div class="detail-sub-h">Báo cáo lúc ${inc.time}</div>
                 <div class="info-row"><span class="info-key">VỊ TRÍ</span><span class="info-val">${inc.location}</span></div>
                 <div class="info-row"><span class="info-key">TÌNH TRẠNG</span><span class="info-val" style="color:${titleColor}">${inc.description}</span></div>
                 <div class="info-row"><span class="info-key">TRẠNG THÁI</span><span class="info-val">${inc.statusLabel}</span></div>
@@ -1578,9 +1140,7 @@
             `;
             document.getElementById('detail-view').classList.remove('hidden');
 
-            if (map) {
-                map.flyTo([inc.lat, inc.lng], 16, { duration: 1.5 });
-            }
+            if (map) { map.flyTo([inc.lat, inc.lng], 16, { duration: 1.5 }); }
         }
 
         function closeDetail() {
@@ -1623,52 +1183,27 @@
         function closeReportModal() { document.getElementById('reportModal').classList.remove('open'); }
         document.getElementById('reportModal').addEventListener('click', function (e) { if (e.target === this) closeReportModal(); });
 
-        /* --- JS CHO TÍNH NĂNG ĐÓNG GÓP --- */
-        function openFeedbackModal() {
-            document.getElementById('feedbackModal').classList.add('open');
-            document.getElementById('feedback-content').focus();
-        }
-
-        function closeFeedbackModal() {
-            document.getElementById('feedbackModal').classList.remove('open');
-        }
-
-        document.getElementById('feedbackModal').addEventListener('click', function (e) {
-            if (e.target === this) closeFeedbackModal();
-        });
+        function openFeedbackModal() { document.getElementById('feedbackModal').classList.add('open'); document.getElementById('feedback-content').focus(); }
+        function closeFeedbackModal() { document.getElementById('feedbackModal').classList.remove('open'); }
+        document.getElementById('feedbackModal').addEventListener('click', function (e) { if (e.target === this) closeFeedbackModal(); });
 
         function submitFeedback() {
             const content = document.getElementById('feedback-content').value.trim();
             const btn = document.querySelector('#feedbackModal .btn-submit');
-
-            if (!content) {
-                alert("Bạn chưa nhập nội dung góp ý nè! 😅");
-                return;
-            }
-
+            if (!content) { alert("Bạn chưa nhập nội dung góp ý nè! 😅"); return; }
             btn.innerHTML = "ĐANG GỬI...";
             setTimeout(() => {
-                alert("Cảm ơn bạn đã đóng góp ý kiến! ❤️\nChúng mình sẽ ghi nhận để cải thiện App.");
+                alert("Cảm ơn bạn đã đóng góp ý kiến! ❤️");
                 document.getElementById('feedback-content').value = "";
                 closeFeedbackModal();
                 btn.innerHTML = "GỬI Ý KIẾN";
                 addPoints(5);
             }, 1000);
         }
-        /* -------------------------------------- */
 
-        /* --- JS CHO TÍNH NĂNG CỬA HÀNG --- */
-        function openStoreModal() {
-            document.getElementById('storeModal').classList.add('open');
-            renderStore();
-        }
-
-        function closeStoreModal() {
-            document.getElementById('storeModal').classList.remove('open');
-        }
-        document.getElementById('storeModal').addEventListener('click', function (e) {
-            if (e.target === this) closeStoreModal();
-        });
+        function openStoreModal() { document.getElementById('storeModal').classList.add('open'); renderStore(); }
+        function closeStoreModal() { document.getElementById('storeModal').classList.remove('open'); }
+        document.getElementById('storeModal').addEventListener('click', function (e) { if (e.target === this) closeStoreModal(); });
 
         function renderStore() {
             const container = document.getElementById('store-container');
@@ -1689,7 +1224,6 @@
         function buyItem(id) {
             const item = storeItems.find(i => i.id === id);
             if (!item) return;
-
             if (contributionPoints >= item.price) {
                 if (confirm(`Bạn có muốn đổi ${item.price} điểm lấy "${item.name}" không?`)) {
                     contributionPoints -= item.price;
@@ -1697,11 +1231,8 @@
                     alert(`✅ Chúc mừng! Bạn đã nhận được: ${item.name}`);
                     closeStoreModal();
                 }
-            } else {
-                alert(`❌ Số dư không đủ! Bạn cần thêm ${item.price - contributionPoints} điểm nữa.`);
-            }
+            } else { alert(`❌ Số dư không đủ! Bạn cần thêm ${item.price - contributionPoints} điểm nữa.`); }
         }
-        /* -------------------------------------- */
 
         function getLocation() {
             const btn = document.querySelector('.btn-geo');
@@ -1718,14 +1249,10 @@
                     if (map) {
                         map.flyTo([userLat, userLng], 16);
                         if (clickMarker) map.removeLayer(clickMarker);
-                        clickMarker = L.marker([userLat, userLng]).addTo(map).bindPopup("Vị trí của bạn").openPopup();
+                        clickMarker = L.marker([userLat, userLng], { icon: myLocIcon }).addTo(map).bindPopup("Vị trí của bạn").openPopup();
                     }
                 },
-                (err) => {
-                    console.error(err);
-                    btn.innerHTML = '❌ Lỗi';
-                    alert("Lỗi: Vui lòng nhấn 'Allow/Cho phép' quyền truy cập vị trí, hoặc thử Click chọn trên bản đồ.");
-                },
+                (err) => { console.error(err); btn.innerHTML = '❌ Lỗi'; alert("Vui lòng cho phép quyền vị trí hoặc Click trực tiếp trên map."); },
                 { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
             );
         }
@@ -1734,79 +1261,6 @@
             if (input.files && input.files.length > 0) {
                 document.getElementById('file-name').textContent = "Đã chọn: " + input.files[0].name;
             }
-        }
-
-        function submitReport() {
-            const btn = document.querySelector('.btn-submit');
-            const type = document.querySelector('input[name="cat"]:checked').value;
-            const desc = document.getElementById('desc-input').value || "Không có mô tả chi tiết";
-            const locInputVal = document.getElementById('loc-input').value || "Vị trí không xác định";
-            const phone = document.getElementById('phone-input').value || "";
-            const fileInput = document.getElementById('modal-file');
-
-            let mediaHTML = "";
-            if (fileInput.files && fileInput.files[0]) {
-                const file = fileInput.files[0];
-                const url = URL.createObjectURL(file);
-                if (file.type.startsWith('video')) {
-                    mediaHTML = `<div class="evidence-container"><div class="evidence-label">MINH CHỨNG (VIDEO)</div><video src="${url}" controls class="evidence-media"></video></div>`;
-                } else {
-                    mediaHTML = `<div class="evidence-container"><div class="evidence-label">MINH CHỨNG (ẢNH)</div><img src="${url}" class="evidence-media"></div>`;
-                }
-            }
-
-            btn.innerHTML = 'ĐANG GỬI DỮ LIỆU...';
-
-            let label = "SỰ CỐ", icon = "⚠️", colorClass = "danger";
-            if (type === 'fire') { label = "HỎA HOẠN"; icon = "🔥"; colorClass = "danger"; }
-            if (type === 'flood') { label = "NGẬP LỤT"; icon = "💧"; colorClass = "accent"; }
-            if (type === 'traffic') { label = "TẮC ĐƯỜNG"; icon = "🚗"; colorClass = "warn"; }
-
-            setTimeout(() => {
-                const now = new Date();
-                const timeStr = now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
-
-                let targetLat = 10.8231, targetLng = 106.6297;
-                const matches = locInputVal.match(/(\d+\.\d+).*?(\d+\.\d+)/);
-                if (matches) { targetLat = parseFloat(matches[1]); targetLng = parseFloat(matches[2]); }
-
-                const newInc = {
-                    id: `inc-${Date.now()}`,
-                    type, label, icon, colorClass,
-                    location: locInputVal,
-                    description: desc,
-                    time: timeStr,
-                    phone,
-                    status: 'urgent',
-                    statusLabel: 'KHẨN CẤP',
-                    lat: targetLat,
-                    lng: targetLng,
-                    mediaHTML,
-                };
-
-                incidents.unshift(newInc);
-                saveIncidentsToStorage();
-                renderIncidentToList(newInc);
-                addIncidentMarker(newInc);
-                updateIncidentCount();
-                updateStats();
-
-                addPoints(10);
-
-                closeReportModal();
-                setTimeout(() => openDetail(newInc.id), 300);
-
-                btn.innerHTML = 'GỬI THÔNG TIN';
-
-                document.getElementById('desc-input').value = "";
-                document.getElementById('file-name').textContent = "";
-                document.getElementById('modal-file').value = "";
-                document.getElementById('loc-input').value = "";
-                document.getElementById('phone-input').value = "";
-                const geoBtn = document.querySelector('.btn-geo');
-                geoBtn.innerHTML = '📍 Lấy vị trí';
-                geoBtn.style.background = ''; geoBtn.style.color = '';
-            }, 1000);
         }
     </script>
 </body>
